@@ -1,6 +1,6 @@
 // components/SearchBar.js
 import { useState } from 'react';
-import { EnvironmentOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, DownOutlined } from '@ant-design/icons';
 
 
 const SearchBar = () => {
@@ -19,24 +19,33 @@ const SearchBar = () => {
                 </p>
             </div>
 
-            <div className="form-searchBar">
-                <div className="search-bar">
-                    <input
-                        className="form-Job"
-                        type="text"
-                        placeholder="Vị trí tuyển dụng"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-                <select>
-                    <option value="Nghệ An">Nghệ An</option>
-                </select>
-                <select>
-                    <option value="Tất cả ngành nghề">Tất cả ngành nghề</option>
-                </select>
-                <button onClick={handleSearch}>Tìm kiếm</button>
-            </div>
+            <form className="form-searchBar">
+                    <div className="item-search">
+                        <input
+                            className="form-Job"
+                            type="text"
+                            placeholder="Vị trí tuyển dụng"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <div className="vertical-line"></div>
+                    <div className="item-select">
+                        <EnvironmentOutlined />
+                        <select className="select-location">
+                            <option value="Nghệ An">Nghệ An</option>
+                        </select>
+                        <DownOutlined />
+                    </div>
+                    <div className="vertical-line"></div>
+                    <div className="item-select">
+                        <select className="select-industry">
+                            <option value="Tất cả ngành nghề">Tất cả ngành nghề</option>
+                        </select>
+                    </div>
+                    <div className="vertical-line"></div>
+                    <button className="search-button" onClick={handleSearch}>Tìm kiếm</button>
+            </form>
 
             <div className='information'>
                 <div>
