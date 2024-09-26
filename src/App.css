@@ -1,0 +1,276 @@
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  align-items: center;
+  width: 100vw;
+  height: 75px;
+  padding-left: 30px;
+  box-sizing: border-box;
+}
+
+.navbar .logoandmenu {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 180px;
+  height: auto;
+}
+
+.navbar .menu {
+  list-style-type: none;
+  color: black;
+  display: flex;
+  gap: 20px;
+  padding-left: 50px;
+  font-weight: bold;
+}
+
+.menu li {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.menu li:hover {
+  color: darkgreen;
+}
+
+.navbar .employer {
+  align-items: center;
+  flex-direction: center;
+  display: flex;
+  color: black;
+  padding-right: 40px;
+}
+
+
+.buttonEmployer a {
+  color: black;
+  text-decoration: none;
+}
+
+.infor {
+  display: flex;
+}
+
+.vertical-line {
+  border-left: 2px solid lightgray;
+  height: 30px;
+  margin: 0 10px;
+}
+
+.notification-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.notification-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #ADFF2F;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notification-icon:hover {
+  background-color: #ADFF2F;
+}
+
+.notification-icon .anticon {
+  color: #32CD32;
+  font-size: 24px;
+}
+
+.user {
+  display: flex;
+  margin-left: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.userimg {
+  display: inline-flex;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid lightgray;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.userimg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.down-button {
+  padding-left: 10px;
+}
+
+.main-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #E0FFFF;
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.header-box {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  color: #009643;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  margin: 0 0 6px;
+}
+
+.description {
+  color: #263a4d;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .12px;
+  line-height: 16px;
+}
+
+.number-hight-light {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .175px;
+  line-height: 22px;
+}
+
+.form-searchBar {
+  flex: 1 0 0;
+  position: relative;
+  z-index: 4;
+}
+
+.search-bar {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.form-Job {
+  background: 0 0;
+  box-shadow: none;
+  color: #212f3f;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -.16px;
+  line-height: 24px;
+  padding: 0;
+  width: 410px;
+}
+
+.search-bar input,
+.search-bar select {
+  padding: 10px;
+  background-color: white;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: black;
+}
+
+.search-bar button {
+  background-color: #0DB14B;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.information {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.information div {
+  text-align: center;
+}
+
+.banner img {
+  width: 100%;
+  height: auto;
+}
+
+
+.job-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.job-item {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  width: 300px;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+}
+
+.job-item:hover {
+  transform: scale(1.05);
+}
+
+.job-header {
+  display: flex;
+  align-items: center;
+}
+
+.company-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+h3 {
+  margin: 0;
+}
+
+.details-btn {
+  background-color: #0DB14B;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.details-btn:hover {
+  background-color: #0A9B3E;
+}
