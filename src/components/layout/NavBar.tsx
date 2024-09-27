@@ -11,7 +11,6 @@ const Navbar = () => {
     const menuItems = ['Việc làm', 'Hồ sơ & CV', 'Công ty', 'Công cụ', 'Cẩm nang nghề nghiệp'];
 
     return (
-        <div className='container'>
             <nav className="navbar">
                 <div className="logoandmenu">
                     <div className='logo'>
@@ -23,7 +22,7 @@ const Navbar = () => {
                                 key={menuItem}
                                 onClick={() => handleMenuClick(menuItem)}
                                 style={{
-                                    color: selectedMenu === menuItem ? 'green' : 'black', // Thay đổi màu sắc khi được chọn
+                                    color: selectedMenu === menuItem ? 'green' : 'black', 
                                     cursor: 'pointer',
                                 }}
                             >
@@ -39,7 +38,7 @@ const Navbar = () => {
                             <a type="primary">Đăng tuyển ngay <DoubleRightOutlined /></a>
                         </div>
                     </div>
-                    <div className="vertical-line"></div>
+                    <div className="vertical-line"/>
                     <div className="infor">
                         <div className="notification-buttons">
                             <div className="notification-icon bell">
@@ -61,7 +60,6 @@ const Navbar = () => {
                 </div>
 
             </nav>
-        </div>
     );
 };
 

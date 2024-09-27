@@ -1,13 +1,11 @@
 import React from 'react';
-
-// Define the expected structure for the job prop
 interface JobItemProps {
   job: {
     title: string;
     location: string;
     salary: string;
-    company: string;  // Add company
-    logots: string;   // Add logots (assuming it's a logo image or something similar)
+    company: string; 
+    logots: string;  
   };
 }
 
