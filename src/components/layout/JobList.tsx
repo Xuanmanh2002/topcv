@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import JobItem from './JobItem';
-import { LeftOutlined, RightOutlined, FilterOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
 
 interface Job {
   title: string;
@@ -26,40 +26,40 @@ const jobs: Job[] = [
 ];
 const locations = ['Ngẫu nhiên', 'Hà Nội', 'Thành phố Hồ Chí Minh', 'Miền Bắc', 'Miền Nam'];
 const JobList: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0); // Index cho vị trí được chọn
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleClick = (index: number) => {
     setActiveIndex(index);
   };
   return (
     <div className='container'>
-      <div className='job'>
-        <section className="title-job">
-          <div className="title-main">
-            <div className="title1">
+      <div className='main-form-job'>
+        <section className="main-form-job-header">
+          <div className="main-form-job-header-item">
+            <div className="main-form-job-header-item-title">
               <h1>Việc làm tốt nhất</h1>
             </div>
             <div className="vertical-line" />
-            <div className="img-title">
+            <div className="main-form-job-header-item-img">
               <img src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/welcome/feature-job/label-toppy-ai.png'></img>
             </div>
-            <div className='page-list-job'>
-              <a className="see-more">Xem tất cả</a>
-              <LeftOutlined className="icon-wrapper" />
-              <RightOutlined className="icon-wrapper" />
+            <div className='main-form-job-header-item-page-size'>
+              <a className="main-form-job-header-item-page-size-see-more">Xem tất cả</a>
+              <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
+              <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
             </div>
           </div>
         </section>
-        <div className="box-filter">
-          <div className="filter">
-            <div className='input-group'>
-              <div className="input-group-prepend">
-                <span className='filter-bars'>
+        <div className="main-form-job-filter">
+          <div className="main-form-job-filter-item">
+            <div className='main-form-job-filter-item-input'>
+              <div className="main-form-job-filter-item-input-prepend">
+                <span className='main-form-job-filter-item-input-prepend-bar'>
                   <FilterOutlined />
                   Lọc theo:
                 </span>
               </div>
-              <select className='form-control' tabIndex={-1} aria-hidden="true">
+              <select className='main-form-job-filter-item-input-selected' tabIndex={-1} aria-hidden="true">
                 <option value="cities">Địa điểm</option>
                 <option value="salary">Mức lương</option>
                 <option value="experience">Kinh nghiệm</option>
@@ -67,31 +67,37 @@ const JobList: React.FC = () => {
               </select>
             </div>
           </div>
-          <div className='box-map'>
-            <div className='map-localtion'>
+          <div className='main-form-job-filter-box-map'>
+            <div className='main-form-job-filter-box-map-localtion'>
 
-              <div className='list-location'>
-                <LeftOutlined className="icon-wrapper" />
+              <div className='main-form-job-filter-box-map-list-location'>
+                <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
                 {locations.map((location, index) => (
                   <div
                     key={index}
-                    className={`location-item ${activeIndex === index ? 'active' : ''}`}
+                    className={`main-form-job-filter-box-map-list-location-item ${activeIndex === index ? 'active' : ''}`}
                     onClick={() => handleClick(index)}
                   >
                     {location}
                   </div>
                 ))}
-                <RightOutlined className="icon-wrapper" />
+                <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
               </div>
-
             </div>
           </div>
         </div>
-        <div className="job-list">
-          <div className="job-list-grid">
+        <div className="main-form-job-list">
+          <div className="main-form-job-list-grid">
             {jobs.slice(0, 12).map((job, index) => (
               <JobItem key={index} job={job} />
             ))}
+          </div>
+        </div>
+        <div className="main-pagination-container">
+          <div className="main-page-size">
+            <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
+            <span className="main-page-infor"><span className="main-page-number">32</span> / 47 trang</span>
+            <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
           </div>
         </div>
       </div>

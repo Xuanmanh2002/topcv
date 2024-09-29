@@ -11,19 +11,19 @@ const Main = () => {
     };
 
     return (
-        <div className="container">
-            <div className='main-form '>
-                <div className="header-box">
-                    <h1 className='title'>Tìm việc làm nhanh 24h, việc làm mới nhất toàn quốc.</h1>
-                    <p className='description'>
-                        "Tiếp cận <span className='number-hight-light'>40,000+</span> tin tuyển dụng việc làm mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam"
+        <main className="container">
+            <div className='main-form'>
+                <div className="main-form-header">
+                    <h1 className='main-form-header-title'>Tìm việc làm nhanh 24h, việc làm mới nhất toàn quốc.</h1>
+                    <p className='main-form-header-description'>
+                        Tiếp cận <span className='main-form-header-description-number-hight-light'>40,000+</span> tin tuyển dụng việc làm mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam
                     </p>
                 </div>
 
-                <form className="form-searchBar">
-                    <div className="item-search">
+                <form className="main-form-search">
+                    <div className="main-form-search-item">
                         <input
-                            className="form-Job"
+                            className="main-form-search-item-form-Job"
                             type="text"
                             placeholder="Vị trí tuyển dụng"
                             value={searchTerm}
@@ -31,49 +31,49 @@ const Main = () => {
                         />
                     </div>
                     <div className="vertical-line"></div>
-                    <div className="item-select">
-                        <EnvironmentOutlined className="location-icon" />
-                        <select className="select-location">
+                    <div className="main-form-search-item-select">
+                        <EnvironmentOutlined className="main-form-search-item-select-location-icon" />
+                        <select className="main-form-search-item-select-location">
                             <option value="Nghệ An">Nghệ An</option>
                         </select>
-                        <DownOutlined className="down" />
+                        <DownOutlined className="main-form-search-item-select-item-down" />
                     </div>
                     <div className="vertical-line"></div>
-                    <div className="item-select">
-                        <ShoppingOutlined className="bag-icon" />
-                        <select className="select-industry">
+                    <div className="main-form-search-item-select">
+                        <ShoppingOutlined className="main-form-search-item-select-bag-icon" />
+                        <select className="main-form-search-item-select-industry">
                             <option value="Tất cả ngành nghề">Tất cả ngành nghề</option>
                         </select>
-                        <DownOutlined className="down" />
+                        <DownOutlined className="main-form-search-item-select-item-down" />
                     </div>
                     <div className="vertical-line"></div>
-                    <div className='button-search'>
-                        <SearchOutlined className="search-icon" />
-                        <button className="button" onClick={handleSearch}>Tìm kiếm</button>
+                    <div className='main-form-search-button'>
+                        <SearchOutlined className="main-form-search-button-icon" />
+                        <button className="main-form-search-button-icon-onlick" onClick={handleSearch}>Tìm kiếm</button>
                     </div>
                 </form>
 
-                <div className='information'>
-                    <div className="infor1">
-                        <span className="item1">Vị trí chờ bạn khám phá</span>
-                        <span className="Quantity">42.645</span>
+                <div className='main-form-information'>
+                    <div className="main-form-information-item">
+                        <span className="main-form-information-item-infor">Vị trí chờ bạn khám phá</span>
+                        <span className="main-form-information-item-quantity">42.645</span>
                     </div>
-                    <div className="infor1">
-                        <span className="item1">Việc làm mới nhất</span>
-                        <span className="Quantity">2.512</span>
+                    <div className="main-form-information-item">
+                        <span className="main-form-information-item-infor">Việc làm mới nhất</span>
+                        <span className="main-form-information-item-quantity">2.512</span>
                     </div>
-                    <div className="infor1">
-                        <span className="item1">Cập nhật lúc</span>
-                        <span className="Quantity">08:27 26/09/2024</span>
+                    <div className="main-form-information-item">
+                        <span className="main-form-information-item-infor">Cập nhật lúc</span>
+                        <span className="main-form-information-item-quantity">08:27 26/09/2024</span>
                     </div>
                 </div>
 
-                <div className="banner">
+                <div className="main-form-banner">
                     <img src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/img/Camp10_CVO_1100x220_1909.png" alt="Banner" />
                 </div>
             </div>
             <JobList />
-        </div>
+        </main>
 
 
 
