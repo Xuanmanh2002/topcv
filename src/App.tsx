@@ -1,16 +1,42 @@
 import React from 'react';
 import Navbar from './components/layout/NavBar';
-import Main from './components/layout/Main';
 import Footer from './components/layout/Footer';
-import "./App.css"
-import "./index.css"
+import { AuthProvider } from './components/auth/AuthProvider';
+import Home from './components/home/Home';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import "./App.css";
+import "./index.css";
+import "./assets/login/auth.css";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+
+const AppContent = () => {
+  const location = useLocation();
+  const hideHeaderFooter = location.pathname === "/login" || location.pathname === "/register"; // Hide for both Login and Register
+
+  return (
+    <>
+      {!hideHeaderFooter && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      {!hideHeaderFooter && <Footer />}
+    </>
+  );
+};
+
 const App = () => {
   return (
-    <div >
-      <Navbar />
-      <Main />
-      <Footer/>
-    </div>
+    <AuthProvider>
+      <main>
+        <Router>
+          <AppContent />
+        </Router>
+      </main>
+    </AuthProvider>
   );
 };
 
