@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
-import { SearchOutlined, EnvironmentOutlined, AppstoreAddOutlined } from '@ant-design/icons';
+import { SearchOutlined, EnvironmentOutlined, AppstoreAddOutlined, HeartOutlined } from '@ant-design/icons';
 import { Select, Input, Button, Typography } from 'antd';
-import JobList from './JobList';
 import { getAllAddress, getAllCategory } from '../../utils/ApiFunctions';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
+
+interface JobItemProps {
+    job: {
+      title: string;
+      location: string;
+      salary: string;
+      company: string;
+      logots: string;
+    };
+  }
 
 interface Address {
     id: number;
@@ -136,7 +145,18 @@ const MainHome = () => {
                     <img src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/img/Camp10_CVO_1100x220_1909.png" alt="Banner" />
                 </div>
             </div>
-            <JobList />
+            <div className="main-form-job-list-grid-item">
+                <img className="main-form-job-list-grid-item-img" src={job.logots} alt={`${job.company} logo`} />
+                <div className="main-form-job-list-grid-item-details">
+                    <h3 className="main-form-job-list-grid-item-title">{job.title}</h3>
+                    <p className="main-form-job-list-grid-item-company">{job.company}</p>
+                    <div className="main-form-job-list-grid-item-info">
+                        <p className="main-form-job-list-grid-item-info-location">{job.location}</p>
+                        <p className="main-form-job-list-grid-item-info-salary">{job.salary}</p>
+                        <HeartOutlined className="main-form-job-list-grid-item-info-icon" />
+                    </div>
+                </div>
+            </div>
         </main>
     );
 };
