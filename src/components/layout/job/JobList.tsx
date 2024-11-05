@@ -1,36 +1,107 @@
-import React, { useState } from 'react';
-import JobItem from './JobItem';
+import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
+import { getAllJob, getAllAddress } from '../../utils/ApiFunctions';
 
-interface Job {
-  title: string;
-  location: string;
-  salary: string;
-  company: string;
-  logots: string;
+interface Address {
+  id: string;
+  name: string;
 }
 
-const jobs: Job[] = [
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Tư Vấn', location: 'Hồ Chí Minh', salary: '15 - 30 triệu', company: 'Công ty ABC', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-  { title: 'Nhân Viên Kế Toán', location: 'Hà Nội', salary: 'Trên 10 triệu', company: 'Công ty XYZ', logots: 'https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/ngan-hang-tmcp-viet-nam-thinh-vuong-vpbank-63e1cb5539e62.jpg' },
-];
-const locations = ['Ngẫu nhiên', 'Hà Nội', 'Thành phố Hồ Chí Minh', 'Miền Bắc', 'Miền Nam'];
+interface EmployerResponse {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  gender: string;
+  telephone: string;
+  addressId: string;
+  companyName: string;
+  avatar: string | null;
+}
+
+interface Job {
+  id: string;
+  jobName: string;
+  experience: string;
+  applicationDeadline: Date;
+  recruitmentDetails: string;
+  price: string;
+  employerId: string;
+  categoryId: string;
+  createAt: Date;
+  employerEmail?: string;
+  employerResponse: EmployerResponse;
+}
+
 const JobList: React.FC = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [currentJobPage, setCurrentJobPage] = useState(1);
+  const [currentAddressPage, setCurrentAddressPage] = useState(1);
+  const jobsPerPage = 12;
+  const addressesPerPage = 5;
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const jobData = await getAllJob();
+        setJobs(jobData);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    const fetchAddresses = async () => {
+      try {
+        const addressData = await getAllAddress();
+        setAddresses(addressData);
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+      }
+    };
+
+    fetchJobs();
+    fetchAddresses();
+  }, []);
 
   const handleClick = (index: number) => {
     setActiveIndex(index);
   };
+
+  const handleNextJobPage = () => {
+    if (currentJobPage < Math.ceil(jobs.length / jobsPerPage)) {
+      setCurrentJobPage(currentJobPage + 1);
+    }
+  };
+
+  const handlePrevJobPage = () => {
+    if (currentJobPage > 1) {
+      setCurrentJobPage(currentJobPage - 1);
+    }
+  };
+
+  const handleNextAddressPage = () => {
+    if (currentAddressPage < Math.ceil(addresses.length / addressesPerPage)) {
+      setCurrentAddressPage(currentAddressPage + 1);
+    }
+  };
+
+  const handlePrevAddressPage = () => {
+    if (currentAddressPage > 1) {
+      setCurrentAddressPage(currentAddressPage - 1);
+    }
+  };
+
+  const indexOfLastJob = currentJobPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
+  const indexOfLastAddress = currentAddressPage * addressesPerPage;
+  const indexOfFirstAddress = indexOfLastAddress - addressesPerPage;
+  const currentAddresses = addresses.slice(indexOfFirstAddress, indexOfLastAddress);
+
   return (
     <div className='container'>
       <div className='main-form-job'>
@@ -41,7 +112,7 @@ const JobList: React.FC = () => {
             </div>
             <div className="vertical-line" />
             <div className="main-form-job-header-item-img">
-              <img src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/welcome/feature-job/label-toppy-ai.png'></img>
+              <img src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/welcome/feature-job/label-toppy-ai.png' alt="Header" />
             </div>
             <div className='main-form-job-header-item-page-size'>
               <a className="main-form-job-header-item-page-size-see-more">Xem tất cả</a>
@@ -69,39 +140,61 @@ const JobList: React.FC = () => {
           </div>
           <div className='main-form-job-filter-box-map'>
             <div className='main-form-job-filter-box-map-localtion'>
-
               <div className='main-form-job-filter-box-map-list-location'>
-                <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
-                {locations.map((location, index) => (
+                <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handlePrevAddressPage} />
+                {currentAddresses.map((address, index) => (
                   <div
-                    key={index}
+                    key={address.id}
                     className={`main-form-job-filter-box-map-list-location-item ${activeIndex === index ? 'active' : ''}`}
                     onClick={() => handleClick(index)}
                   >
-                    {location}
+                    {address.name}
                   </div>
                 ))}
-                <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
+                <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handleNextAddressPage} />
               </div>
             </div>
           </div>
         </div>
         <div className="main-form-job-list">
           <div className="main-form-job-list-grid">
-            {jobs.slice(0, 12).map((job, index) => (
-              <JobItem key={index} job={job} />
+            {currentJobs.map(job => (
+              <div key={job.id} className="main-form-job-list-grid-item">
+                <img
+                  className="main-form-job-list-grid-item-img"
+                  src={job.employerResponse.avatar ? `data:image/jpeg;base64,${job.employerResponse.avatar}` : "default-avatar-url.jpg"}
+                  alt={job.jobName}
+                />
+                <div className="main-form-job-list-grid-item-details">
+                  <h3 className="main-form-job-list-grid-item-title">
+                    {job.jobName.length > 23 ? job.jobName.slice(0, 23) + '...' : job.jobName}
+                  </h3>
+                  <p className="main-form-job-list-grid-item-company">{job.employerResponse.companyName}</p>
+                  <div className="main-form-job-list-grid-item-info">
+                    <p className="main-form-job-list-grid-item-info-location">
+                      {
+                        addresses.find(address => address.id === job.employerResponse.addressId)?.name || "Địa chỉ không xác định"
+                      }
+                    </p>
+                    <p className="main-form-job-list-grid-item-info-salary">{job.price} VNĐ</p>
+                    <HeartOutlined className="main-form-job-list-grid-item-info-icon" />
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
         <div className="main-pagination-container">
           <div className="main-page-size">
-            <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
-            <span className="main-page-infor"><span className="main-page-number">32</span> / 47 trang</span>
-            <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
+            <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handlePrevJobPage} />
+            <span className="main-page-infor">
+              <span className="main-page-number">{currentJobPage}</span> / {Math.ceil(jobs.length / jobsPerPage)} trang
+            </span>
+            <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handleNextJobPage} />
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

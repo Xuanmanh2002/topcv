@@ -139,4 +139,15 @@ export async function getAllJob(): Promise<any[]> {
 	}
 }
 
+export async function getEmployer(email: string): Promise<any[]> {
+	try {
+		const response = await api.get(`/employer/show-profile/${email}`, {
+		});
+		return response.data;
+	} catch (error: any) {
+		console.error("Error fetching employer profile:", error);
+		throw error;
+	}
+}
+
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SearchOutlined, EnvironmentOutlined, AppstoreAddOutlined, HeartOutlined } from '@ant-design/icons';
 import { Select, Input, Button, Typography } from 'antd';
 import { getAllJob, getAllAddress, getAllCategory } from '../../utils/ApiFunctions';
+import JobList from './JobList';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -126,25 +127,10 @@ const MainHome = () => {
                 </form>
 
                 <div className='main-form-job-list'>
-                    {jobs.map((job, index) => (
-                        <div key={index} className="main-form-job-list-grid-item">
-                            <img className="main-form-job-list-grid-item-img" src={job.logots} alt={`${job.company} logo`} />
-                            <div className="main-form-job-list-grid-item-details">
-                                <h3 className="main-form-job-list-grid-item-title">{job.title}</h3>
-                                <p className="main-form-job-list-grid-item-company">{job.company}</p>
-                                <div className="main-form-job-list-grid-item-info">
-                                    <p className="main-form-job-list-grid-item-info-location">
-                                        <EnvironmentOutlined style={{ marginRight: 4 }} />
-                                        {job.location}
-                                    </p>
-                                    <p className="main-form-job-list-grid-item-info-salary">{job.salary}</p>
-                                    <HeartOutlined className="main-form-job-list-grid-item-info-icon" />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                    <img src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/img/Banner%201.png'/>
                 </div>
             </div>
+            <JobList/>
         </main>
     );
 };
