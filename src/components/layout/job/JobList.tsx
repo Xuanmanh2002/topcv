@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
 import { getAllJob, getAllAddress } from '../../utils/ApiFunctions';
+import { useNavigate } from 'react-router-dom';
 
 interface Address {
   id: string;
@@ -35,6 +36,7 @@ interface Job {
 }
 
 const JobList: React.FC = () => {
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -166,7 +168,9 @@ const JobList: React.FC = () => {
                   alt={job.jobName}
                 />
                 <div className="main-form-job-list-grid-item-details">
-                  <h3 className="main-form-job-list-grid-item-title">
+                  <h3 className="main-form-job-list-grid-item-title"
+                    onClick={() => navigate(`/job/${job.jobName}`)}
+                    style={{ cursor: 'pointer' }}>
                     {job.jobName.length > 23 ? job.jobName.slice(0, 23) + '...' : job.jobName}
                   </h3>
                   <p className="main-form-job-list-grid-item-company">{job.employerResponse.companyName}</p>
