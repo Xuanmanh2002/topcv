@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { getAllJob, getAllCategory, getAllAddress } from '../../utils/ApiFunctions';
 import { Link } from 'react-router-dom';
-import { FaDollarSign, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa';
+import { FaDollarSign, FaMapMarkerAlt, FaChevronRight, FaCube } from 'react-icons/fa';
+import { CiHeart, CiClock1, CiBellOn } from "react-icons/ci";
+import { PiPaperPlaneTiltThin } from "react-icons/pi";
 import { HourglassOutlined } from '@ant-design/icons';
+import { MdOutlineReportGmailerrorred, MdOutlineSupervisorAccount } from "react-icons/md";
+import { RiEditBoxLine } from "react-icons/ri";
+import { FaLocationDot } from "react-icons/fa6";
 import SearchForm from './SearchForm';
+import { format } from 'date-fns';
 
 const ProfileJob = () => {
   interface Category {
@@ -48,6 +54,15 @@ const ProfileJob = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleSearch = () => {
     console.log(searchTerm);
@@ -89,6 +104,10 @@ const ProfileJob = () => {
     fetchCategories();
   }, []);
 
+  const formattedDeadline = selectedJob?.applicationDeadline
+    ? format(new Date(selectedJob.applicationDeadline), 'dd/MM/yyyy')
+    : "Not specified"
+
   return (
     <div className='container'>
       <div className="job-detail-layout">
@@ -109,45 +128,150 @@ const ProfileJob = () => {
               </Link>
             </div>
             <div className='job-company-profile'>
-              <div className="job-card">
-                <h3>{selectedJob?.jobName || "Job Title Placeholder"}</h3>
-                <div className="job-info">
-                  <p>
-                    <FaDollarSign />
-                    <a className='job-price'>
-                      Mức lương
-                      <span>{selectedJob?.price || "Not specified"}</span>
+              <div className='job-company-profile-description'>
+                <div className="job-card">
+                  <h3>{selectedJob?.jobName || "Job Title Placeholder"}</h3>
+                  <div className="job-info">
+                    <p>
+                      <FaDollarSign />
+                      <a className='job-price'>
+                        Mức lương
+                        <span>{selectedJob?.price || "Not specified"}</span>
+                      </a>
+                    </p>
+                    <p>
+                      <FaMapMarkerAlt />
+                      <a className='job-location'>
+                        Địa điểm
+                        <span>{
+                          addresses.find((addr) => addr.id === Number(selectedJob?.employerResponse?.addressId))?.name || "Unknown"
+                        }</span>
+                      </a>
+                    </p>
+                    <p>
+                      <HourglassOutlined />
+                      <a className='job-experience'>
+                        Kinh nghiệm
+                        <span>{selectedJob?.experience || "Not specified"}</span>
+                      </a>
+                    </p>
+                  </div>
+                  <div className="job-deadline">
+                    <CiClock1 />
+                    <a>
+                      Hạn nạp hồ sơ: {formattedDeadline}
                     </a>
-                  </p>
-                  <p>
-                    <FaMapMarkerAlt />
-                    <a className='job-location'>
-                      Địa điểm
-                      <span>{
-                        addresses.find((addr) => addr.id === Number(selectedJob?.employerResponse?.addressId))?.name || "Unknown"
-                      }</span>
-                    </a>
-                  </p>
-                  <p>
-                    <HourglassOutlined />
-                    <a className='job-experience'>
-                      Kinh nghiệm
-                      <span>{selectedJob?.experience || "Not specified"}</span>
-                    </a>
-                  </p>
+                  </div>
+                  <div className="button-group">
+                    <button className="apply-button" onClick={openModal}>
+                      <PiPaperPlaneTiltThin />
+                      Ứng tuyển ngay
+                    </button>
+                    {isModalOpen && (
+                      <div className="modal-job-overlay">
+                        <div className="modal-job-content">
+                          <div className='modal-job-name-button'>
+                            <h2>Ứng tuyển <span>{selectedJob?.jobName || "Job Name"}</span> </h2>
+                            <button onClick={closeModal} className="modal-job-close-button">×</button>
+                          </div>
+                          <form className="modal-job-apply-form">
+                            <div className="modal-job-form-section">
+                              <label className="modal-job-upload-label">Chọn CV để ứng tuyển:</label>
+                              <input type="file" accept=".doc,.docx,.pdf" className="modal-job-file-input" />
+                              <small>Hỗ trợ định dạng .doc, .docx, .pdf có kích thước dưới 5MB</small>
+                            </div>
+                            <div className="modal-job-form-group">
+                              <label>Họ và tên *</label>
+                              <input type="text" placeholder="Họ tên hiển thị với NTD" required />
+                            </div>
+                            <div className="modal-job-form-group">
+                              <label>Email *</label>
+                              <input type="email" placeholder="Email hiển thị với NTD" required />
+                            </div>
+                            <div className="modal-job-form-group">
+                              <label>Số điện thoại *</label>
+                              <input type="text" placeholder="Số điện thoại hiển thị với NTD" required />
+                            </div>
+                            <div className="modal-job-form-group">
+                              <label>Thư giới thiệu</label>
+                              <textarea placeholder="Viết giới thiệu ngắn gọn..."></textarea>
+                            </div>
+                            <p className="modal-job-warning-text">
+                              <strong>Lưu ý:</strong> TopCV khuyến cáo bạn nên thận trọng...
+                            </p>
+                            <div className="modal-job-button-group">
+                              <button type="button" onClick={closeModal} className="modal-job-cancel-button">Hủy</button>
+                              <button type="submit" className="modal-submit-button">Nộp hồ sơ ứng tuyển</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    )}
+                    <button className="save-button">
+                      <CiHeart style={{ fontSize: "18px", fontWeight: "bold" }} />
+                      Lưu tin
+                    </button>
+                  </div>
                 </div>
-                <button className="apply-button">Ứng tuyển ngay</button>
-                <button className="save-button">Lưu tin</button>
+                <div className='job-description'>
+                  <div className='job-description-title'>
+                    <a>Chi tiết tuyển dụng</a>
+                    <a>
+                      <CiBellOn />
+                      Gửi tôi việc làm tương tự
+                    </a>
+                  </div>
+                  <div className='job-desctiption-recruitment'>
+                    <a>Mô tả công việc</a>
+                    <p>- <span>{selectedJob?.recruitmentDetails || "Not specified"}</span></p>
+                  </div>
+                  <div className="job-desctiption-recruitment-deadline">
+                    <a>
+                      Hạn nạp hồ sơ: {formattedDeadline}
+                    </a>
+                  </div>
+                  <div className="job-desctiption-recruitment-button-group">
+                    <button className="job-desctiption-recruitment-apply-button" onClick={openModal}>
+                      Ứng tuyển ngay
+                    </button>
+                    <button className="job-desctiption-recruitment-save-button">
+                      Lưu tin
+                    </button>
+                  </div>
+                  <div className='job-desctiption-report'>
+                    <MdOutlineReportGmailerrorred />
+                    <a>Báo cáo tin tuyển dụng. Nếu bạn thấy rằng tin tuyển dụng này không đúng hoặc có dấu hiệu lừa đảo,
+                      <span>hãy phản ánh với chúng tôi</span>
+                    </a>
+                  </div>
+                </div>
               </div>
+
               <div className='job-company'>
                 <div className="company-info">
-                  <h4>{selectedJob?.employerResponse.companyName || "Company Name"}</h4>
-                  <button className="link-button">Xem trang công ty</button>
-                  <hr />
-                  <div>
-                    <p>Quy mô: 25-99 nhân viên</p>
-                    <p>Lĩnh vực: Thiết kế / kiến trúc</p>
-                    <p>Địa điểm: Số 130 đường Hoàng Công Chất, Phường Phú Diễn...</p>
+                  <div className='company-info-logo-name'>
+                    <div className='job-company-image'>
+                      <img
+                        className="job-company-logo"
+                        src={selectedJob?.employerResponse.avatar ? `data:image/jpeg;base64,${selectedJob?.employerResponse.avatar}` : "default-avatar-url.jpg"}
+                        alt={selectedJob?.jobName}
+                      />
+                    </div>
+                    <h4>{selectedJob?.employerResponse.companyName || "Company Name"}</h4>
+                  </div>
+                  <div className='company-info-form'>
+                    <div>
+                      <p className="icon-text"><MdOutlineSupervisorAccount /> <span>Quy mô: 25-99 nhân viên</span></p>
+                      <p className="icon-text"><FaCube /> <span>Lĩnh vực: Thiết kế / kiến trúc</span></p>
+                      <p className="icon-text"><FaLocationDot /> <span>Địa điểm:</span>
+                        <span style={{ marginLeft: '4px' }}>
+                          {addresses.find(addr => addr.id === Number(selectedJob?.employerResponse?.addressId))?.name || "Unknown"}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className='company-link-button'>
+                    <button className="link-button">Xem trang công ty <RiEditBoxLine /></button>
                   </div>
                 </div>
 
