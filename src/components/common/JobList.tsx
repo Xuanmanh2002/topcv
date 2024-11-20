@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
-import { getAllJob, getAllAddress } from '../../utils/ApiFunctions';
+import { getAllJob, getAllAddress } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
 
 interface Address {
@@ -169,7 +169,7 @@ const JobList: React.FC = () => {
                 />
                 <div className="main-form-job-list-grid-item-details">
                   <h3 className="main-form-job-list-grid-item-title"
-                    onClick={() => navigate(`/job/${job.jobName}`)}
+                    onClick={() => navigate(`/viec-lam/${job.jobName}`)}
                     style={{ cursor: 'pointer' }}>
                     {job.jobName.length > 23 ? job.jobName.slice(0, 23) + '...' : job.jobName}
                   </h3>

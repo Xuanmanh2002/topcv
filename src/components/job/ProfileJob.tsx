@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { getAllJob, getAllCategory, getAllAddress } from '../../utils/ApiFunctions';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { getAllJob, getAllCategory, getAllAddress, createApplication } from '../utils/ApiFunctions';
 import { Link } from 'react-router-dom';
 import { FaDollarSign, FaMapMarkerAlt, FaChevronRight, FaCube } from 'react-icons/fa';
 import { CiHeart, CiClock1, CiBellOn } from "react-icons/ci";
@@ -23,7 +23,7 @@ const ProfileJob = () => {
   }
 
   interface EmployerResponse {
-    id: string;
+    id: number;
     email: string;
     firstName: string;
     lastName: string;
@@ -36,7 +36,7 @@ const ProfileJob = () => {
   }
 
   interface Job {
-    id: string;
+    id: number;
     jobName: string;
     experience: string;
     applicationDeadline: Date;
@@ -55,6 +55,41 @@ const ProfileJob = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [telephone, setTelephone] = useState('');
+  const [letter, setLetter] = useState('');
+  const [cv, setCv] = useState<File | null>(null);
+  const [applicationError, setApplicationError] = useState<string | null>(null);
+  const [applicationSuccess, setApplicationSuccess] = useState<string | null>(null);
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setCv(e.target.files[0]);
+    }
+  };
+
+  const handleSubmitApplication = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!selectedJob || !cv) {
+      setApplicationError("Chọn công việc và CV hợp lệ trước khi nộp.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setApplicationError("Token không hợp lệ. Vui lòng đăng nhập lại.");
+        return;
+      }
+
+      const response = await createApplication(fullName, email, telephone, letter, cv, Number(selectedJob.id), token); // Include the token
+      setApplicationSuccess("Nộp hồ sơ thành công!");
+      setApplicationError(null);
+    } catch (error: any) {
+      setApplicationError(error.message || "Đã xảy ra lỗi khi nộp hồ sơ.");
+    }
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -106,8 +141,7 @@ const ProfileJob = () => {
 
   const formattedDeadline = selectedJob?.applicationDeadline
     ? format(new Date(selectedJob.applicationDeadline), 'dd/MM/yyyy')
-    : "Not specified"
-
+    : "Not specified";
   return (
     <div className='container'>
       <div className="job-detail-layout">
@@ -171,34 +205,33 @@ const ProfileJob = () => {
                       <div className="modal-job-overlay">
                         <div className="modal-job-content">
                           <div className='modal-job-name-button'>
-                            <h2>Ứng tuyển <span>{selectedJob?.jobName || "Job Name"}</span> </h2>
+                            <h2>Ứng tuyển <span>{selectedJob?.jobName || "Job Name"}</span></h2>
                             <button onClick={closeModal} className="modal-job-close-button">×</button>
                           </div>
-                          <form className="modal-job-apply-form">
+                          {applicationError && <p className="error-message">{applicationError}</p>}
+                            {applicationSuccess && <p className="success-message">{applicationSuccess}</p>}
+                          <form className="modal-job-apply-form" onSubmit={handleSubmitApplication}>
                             <div className="modal-job-form-section">
                               <label className="modal-job-upload-label">Chọn CV để ứng tuyển:</label>
-                              <input type="file" accept=".doc,.docx,.pdf" className="modal-job-file-input" />
+                              <input type="file" accept=".doc,.docx,.pdf" className="modal-job-file-input" onChange={handleFileChange} required />
                               <small>Hỗ trợ định dạng .doc, .docx, .pdf có kích thước dưới 5MB</small>
                             </div>
                             <div className="modal-job-form-group">
                               <label>Họ và tên *</label>
-                              <input type="text" placeholder="Họ tên hiển thị với NTD" required />
+                              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Họ tên hiển thị với NTD" required />
                             </div>
                             <div className="modal-job-form-group">
                               <label>Email *</label>
-                              <input type="email" placeholder="Email hiển thị với NTD" required />
+                              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email hiển thị với NTD" required />
                             </div>
                             <div className="modal-job-form-group">
                               <label>Số điện thoại *</label>
-                              <input type="text" placeholder="Số điện thoại hiển thị với NTD" required />
+                              <input type="text" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Số điện thoại hiển thị với NTD" required />
                             </div>
                             <div className="modal-job-form-group">
                               <label>Thư giới thiệu</label>
-                              <textarea placeholder="Viết giới thiệu ngắn gọn..."></textarea>
+                              <textarea value={letter} onChange={(e) => setLetter(e.target.value)} placeholder="Viết giới thiệu ngắn gọn..."></textarea>
                             </div>
-                            <p className="modal-job-warning-text">
-                              <strong>Lưu ý:</strong> TopCV khuyến cáo bạn nên thận trọng...
-                            </p>
                             <div className="modal-job-button-group">
                               <button type="button" onClick={closeModal} className="modal-job-cancel-button">Hủy</button>
                               <button type="submit" className="modal-submit-button">Nộp hồ sơ ứng tuyển</button>

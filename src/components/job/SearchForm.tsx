@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllCategory, getAllAddress } from '../../utils/ApiFunctions';
+import { getAllCategory, getAllAddress } from '../utils/ApiFunctions';
 import { MenuUnfoldOutlined, EnvironmentOutlined, SearchOutlined, DownOutlined } from '@ant-design/icons';
 
 const SearchForm = () => {

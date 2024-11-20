@@ -18,7 +18,7 @@ interface CustomerRoleResponse {
 
 export async function checkRoleCustomer(token: string): Promise<boolean> {
 	try {
-		const response: AxiosResponse<CustomerRoleResponse> = await api.get("/check-role-customer", {
+		const response: AxiosResponse<CustomerRoleResponse> = await api.get("/api/customer/check-role-customer", {
 			headers: {
 				Authorization: `Bearer ${token}`,
 				"Content-Type": "application/json"
@@ -52,7 +52,7 @@ interface CustomerData {
 
 export async function loginCustomer(login: LoginData): Promise<CustomerData | null> {
 	try {
-		const response: AxiosResponse<CustomerData> = await api.post("/login-customer", login);
+		const response: AxiosResponse<CustomerData> = await api.post("/api/customer/login", login);
 		if (response.status >= 200 && response.status < 300) {
 			const customerData = response.data;
 
@@ -85,7 +85,7 @@ export async function loginCustomer(login: LoginData): Promise<CustomerData | nu
 
 export async function registerCustomer(formData: FormData): Promise<any> {
 	try {
-		const response = await api.post("/register-customer", formData, {
+		const response = await api.post("/api/customer/register", formData, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
@@ -150,4 +150,36 @@ export async function getEmployer(email: string): Promise<any[]> {
 	}
 }
 
+export const createApplication = async (
+	fullName: string,
+	email: string,
+	telephone: string,
+	letter: string,
+	cv: File,
+	jobId: number,
+	token: string
+): Promise<any> => {
+	const formData = new FormData();
+	formData.append('fullName', fullName);
+	formData.append('email', email);
+	formData.append('telephone', telephone);
+	formData.append('letter', letter);
+	formData.append('cv', cv);
+	formData.append('jobId', jobId.toString());
+
+	try {
+		const response = await api.post("/api/application-documents/add", formData, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "multipart/form-data",
+			},
+		});
+
+		return response.data;
+	} catch (error: any) {
+		const errorMessage = error.response?.data?.message || "Error creating application";
+		console.error(errorMessage);
+		throw new Error(errorMessage);
+	}
+};
 

@@ -177,7 +177,7 @@ const Register: React.FC = () => {
                             </Checkbox>
                         </Form.Item>
                         <div className="agreement">
-                            Bạn đã có tài khoản? <a style={{ color: '#00b14f' }} href="/login">Đăng nhập ngay</a>
+                            Bạn đã có tài khoản? <a style={{ color: '#00b14f' }} href="/dang-nhap">Đăng nhập ngay</a>
                         </div>
                         <div className="contact-info">
                             <p style={{ fontWeight: 'bold' }}>Bạn gặp khó khăn khi tạo tài khoản?</p>

@@ -1,0 +1,121 @@
+.employer-container {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+.header {
+    padding-top: 24px;
+    width: 100%;
+    background-color: #f0fff4;
+}
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    gap: 300px;
+}
+
+.header-text {
+    flex: 1;
+    max-width: 600px;
+}
+
+.header-tabs {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+}
+
+.tab-button.active {
+    border-bottom: 2px solid #000;
+    color: #000;
+}
+
+.header-title {
+    color: #00b96b;
+}
+
+.header-description {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.search-input-company {
+    max-width: 543px;
+    max-height: 48px;
+    border-radius: 120px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ant-btn-primary {
+    background-color: #00b96b;
+    border-color: #00b96b;
+}
+
+.company-img {
+    width: 272px;
+    height: auto;
+}
+
+.featured-companies {
+    padding: 20px;
+    text-align: center;
+}
+
+.featured-companies-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 24px !important;
+}
+
+.featured-companies-content {
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.ant-row {
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.company-card {
+    width: 380px;
+    height: 424px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.company-card-img {
+    height: 150px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.ant-card-meta-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00b96b;
+}
+
+.ant-card-meta-description {
+    font-size: 14px;
+    color: #666;
+}

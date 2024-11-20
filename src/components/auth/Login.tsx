@@ -75,7 +75,7 @@ const Login = () => {
                             </Checkbox>
                         </Form.Item>
                         <div className="agreement">
-                            Bạn chưa có tài khoản? <a style={{ color: '#00b14f' }} href="/register">Đăng ký ngay</a>
+                            Bạn chưa có tài khoản? <a style={{ color: '#00b14f' }} href="/dang-ky">Đăng ký ngay</a>
                         </div>
                         <div className="contact-info">
                             <p style={{ fontWeight: 'bold' }}>Bạn gặp khó khăn khi tạo tài khoản?</p>

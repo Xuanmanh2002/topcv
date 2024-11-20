@@ -8,7 +8,7 @@ const Navbar = () => {
     const [showAccount, setShowAccount] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
     const [customer, setCustomer] = useState({
-        adminId:"",
+        adminId: "",
         firstName: "",
         lastName: "",
         avatar: "",
@@ -23,17 +23,25 @@ const Navbar = () => {
         setIsLoggedIn(!!token);
 
         const storedCustomer = {
-            adminId: localStorage.getItem("adminId")|| "",
+            adminId: localStorage.getItem("adminId") || "",
             firstName: localStorage.getItem("firstName") || "",
             lastName: localStorage.getItem("lastName") || "",
             avatar: localStorage.getItem("avatar") || "",
             email: localStorage.getItem("email") || "",
         };
         setCustomer(storedCustomer);
+
+        // Load selected menu from localStorage
+        const storedMenu = localStorage.getItem("selectedMenu");
+        if (storedMenu) {
+            setSelectedMenu(storedMenu);
+        }
     }, []);
 
-    const handleMenuClick = (menu: string) => {
+    const handleMenuClick = (menu: string, path: string) => {
         setSelectedMenu(menu);
+        localStorage.setItem("selectedMenu", menu); 
+        navigate(path);
     };
 
     const toggleDropdown = () => {
@@ -55,7 +63,7 @@ const Navbar = () => {
                 </div>
                 <ul className="navbar-menu-item">
                     <li
-                        onClick={() => handleMenuClick("Việc làm")}
+                        onClick={() => handleMenuClick("Việc làm", "/viec-lam")}
                         style={{
                             color: selectedMenu === "Việc làm" ? 'green' : 'black',
                             cursor: 'pointer',
@@ -64,7 +72,7 @@ const Navbar = () => {
                         Việc làm
                     </li>
                     <li
-                        onClick={() => handleMenuClick("Hồ sơ & CV")}
+                        onClick={() => handleMenuClick("Hồ sơ & CV", "/quan-ly-cv")}
                         style={{
                             color: selectedMenu === "Hồ sơ & CV" ? 'green' : 'black',
                             cursor: 'pointer',
@@ -73,40 +81,13 @@ const Navbar = () => {
                         Hồ sơ & CV
                     </li>
                     <li
-                        onClick={() => handleMenuClick("Công ty")}
+                        onClick={() => handleMenuClick("Công ty", "/cong-ty")}
                         style={{
                             color: selectedMenu === "Công ty" ? 'green' : 'black',
                             cursor: 'pointer',
                         }}
                     >
                         Công ty
-                    </li>
-                    <li
-                        onClick={() => handleMenuClick("Công cụ")}
-                        style={{
-                            color: selectedMenu === "Công cụ" ? 'green' : 'black',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Công cụ
-                    </li>
-                    <li
-                        onClick={() => handleMenuClick("Cẩm nang nghề nghiệp")}
-                        style={{
-                            color: selectedMenu === "Cẩm nang nghề nghiệp" ? 'green' : 'black',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        Cẩm nang nghề nghiệp
-                    </li>
-                    <li
-                        onClick={() => handleMenuClick("TopCV pro")}
-                        style={{
-                            color: selectedMenu === "TopCV pro" ? 'green' : 'black',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        TopCV pro
                     </li>
                 </ul>
             </div>
@@ -179,8 +160,8 @@ const Navbar = () => {
                     </>
                 ) : (
                     <div className="button-container">
-                        <Button className="button-link" type="link" onClick={() => navigate('/login')}>Đăng nhập</Button>
-                        <Button className="button-primary" type="link" onClick={() => navigate('/register')}>Đăng ký</Button>
+                        <Button className="button-link" type="link" onClick={() => navigate('/dang-nhap')}>Đăng nhập</Button>
+                        <Button className="button-primary" type="link" onClick={() => navigate('/dang-ky')}>Đăng ký</Button>
                         <Button className="button-default" type="default">Đăng tuyển & tìm hồ sơ</Button>
                     </div>
                 )}

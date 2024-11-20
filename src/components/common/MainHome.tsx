@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { SearchOutlined, EnvironmentOutlined, AppstoreAddOutlined, HeartOutlined } from '@ant-design/icons';
 import { Select, Input, Button, Typography } from 'antd';
-import { getAllJob, getAllAddress, getAllCategory } from '../../utils/ApiFunctions';
+import { getAllJob, getAllAddress, getAllCategory } from '../utils/ApiFunctions';
 import JobList from './JobList';
 
-const { Title, Paragraph } = Typography;
 const { Option } = Select;
 
 interface Job {
@@ -71,14 +70,7 @@ const MainHome = () => {
     return (
         <main className="container">
             <div className='main-form'>
-                <div className="main-form-header">
-                    <Title className='main-form-header-title' level={1}>
-                        Tìm việc làm nhanh 24h, việc làm mới nhất toàn quốc.
-                    </Title>
-                    <Paragraph className='main-form-header-description'>
-                        Tiếp cận <span className='main-form-header-description-number-hight-light'>40,000+</span> tin tuyển dụng việc làm mỗi ngày từ hàng nghìn doanh nghiệp uy tín tại Việt Nam
-                    </Paragraph>
-                </div>
+               
 
                 <form className="main-form-search">
                     <div className="main-form-search-item">

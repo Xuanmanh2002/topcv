@@ -1,5 +1,5 @@
 import React from 'react'
-import MainHome from '../layout/job/MainHome'
+import MainHome from '../common/MainHome'
 const Home = () => {
   return (
     <div>
