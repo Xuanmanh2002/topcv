@@ -1,75 +1,119 @@
-import React from 'react';
-import { Input, Button, Card, Row, Col, Typography, Space } from 'antd';
-import Header from './Header';
+import React, { useEffect, useState } from 'react';
+import { Input, Button, Card, Row, Col, Typography, Space, Spin, message } from 'antd';
+import { getEmployerByRank } from '../utils/ApiFunctions';
+import company from '../../assets/img/company-billBoard.webp';
 
-
+const { Search } = Input;
 const { Title, Paragraph } = Typography;
 
+interface EmployerResponse {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  gender: string;
+  telephone: string;
+  addressId: string;
+  companyName: string;
+  avatar: string | null;
+  rank: string;
+}
+
 const Employer = () => {
+  const [employers, setEmployers] = useState<EmployerResponse[]>([]);
+  const [filteredEmployers, setFilteredEmployers] = useState<EmployerResponse[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEmployers = async () => {
+      try {
+        const data = await getEmployerByRank();
+        setEmployers(data);
+        setFilteredEmployers(data);
+      } catch (error: any) {
+        setError("Error fetching employers by rank.");
+        message.error("Failed to fetch employers.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmployers();
+  }, []);
+
+  const handleSearch = (value: string) => {
+    const filtered = employers.filter(employer =>
+      employer.companyName.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredEmployers(filtered);
+  };
+
   return (
     <div className="employer-container">
-      <Header />
+      <div className="header">
+        <div className="header-content">
+          <div className="header-text">
+            <div className="header-tabs">
+              <Space size="large">
+                <Button type="link" className="tab-button active">
+                  Danh sách công ty
+                </Button>
+                <Button type="link" className="tab-button">
+                  Top công ty
+                </Button>
+              </Space>
+            </div>
+            <Title level={2} className="header-title">
+              Khám phá 100.000+ công ty nổi bật
+            </Title>
+            <Paragraph className="header-description">
+              Tra cứu thông tin công ty và tìm kiếm nơi làm việc tốt nhất dành cho bạn
+            </Paragraph>
+            <div className="search-bar">
+              <Search
+                placeholder="Nhập tên công ty"
+                enterButton={<Button type="primary">Tìm kiếm</Button>}
+                size="large"
+                className="search-input-company"
+                onSearch={handleSearch}
+              />
+            </div>
+          </div>
+          <div className="header-img">
+            <img
+              src={company}
+              alt="Company Billboard"
+              className="company-img"
+            />
+          </div>
+        </div>
+      </div>
       <div className="featured-companies">
-        <Title level={4} className="featured-companies-title">
+        <h4 className="featured-companies-title">
           DANH SÁCH CÁC CÔNG TY NỔI BẬT
-        </Title>
-        <Row className='featured-companies-content'>
-          <Col>
-            <Card
-              hoverable
-              className="company-card"
-              cover={
+        </h4>
+        <div className="featured-companies-content">
+          {loading ? (
+            <Spin size="large" />
+          ) : error ? (
+            <p>{error}</p>
+          ) : (
+            filteredEmployers.map((employer) => (
+              <div key={employer.id} className="company-card">
                 <img
-                  alt="Vuihoc"
-                  src="vuihoc.png"
+                  alt={employer.companyName}
+                  src={employer.avatar ? `data:image/png;base64,${employer.avatar}` : '/default-avatar.png'}
                   className="company-card-img"
                 />
-              }
-            >
-              <Card.Meta
-                title="VUIHOC.VN"
-                description="VUIHOC là trường học trực tuyến cho học sinh từ lớp 1 đến lớp 12 với sứ mệnh 'đem cơ hội tiếp cận bình đẳng các chương trình giáo dục chất lượng cao...'"
-              />
-            </Card>
-          </Col>
-          <Col>
-            <Card
-              hoverable
-              className="company-card"
-              cover={
-                <img
-                  alt="Vuihoc"
-                  src="vuihoc.png"
-                  className="company-card-img"
-                />
-              }
-            >
-              <Card.Meta
-                title="VUIHOC.VN"
-                description="VUIHOC là trường học trực tuyến cho học sinh từ lớp 1 đến lớp 12 với sứ mệnh 'đem cơ hội tiếp cận bình đẳng các chương trình giáo dục chất lượng cao...'"
-              />
-            </Card>
-          </Col>
-          <Col>
-            <Card
-              hoverable
-              className="company-card"
-              cover={
-                <img
-                  alt="Vuihoc"
-                  src="vuihoc.png"
-                  className="company-card-img"
-                />
-              }
-            >
-              <Card.Meta
-                title="VUIHOC.VN"
-                description="VUIHOC là trường học trực tuyến cho học sinh từ lớp 1 đến lớp 12 với sứ mệnh 'đem cơ hội tiếp cận bình đẳng các chương trình giáo dục chất lượng cao...'"
-              />
-            </Card>
-          </Col>
-
-        </Row>
+                <div className="company-card-meta">
+                  <h5 className="company-name">{employer.companyName}</h5>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import { SearchOutlined, EnvironmentOutlined, AppstoreAddOutlined, HeartOutlined
 import { Select, Input, Button, Typography } from 'antd';
 import { getAllJob, getAllAddress, getAllCategory } from '../utils/ApiFunctions';
 import JobList from './JobList';
+import Slider from '../common/Slider'
+import JobListLike from './JobListLike';
 
 const { Option } = Select;
 
@@ -123,6 +125,8 @@ const MainHome = () => {
                 </div>
             </div>
             <JobList/>
+            <Slider/>
+            <JobListLike/>
         </main>
     );
 };

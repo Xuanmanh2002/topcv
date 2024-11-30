@@ -183,3 +183,31 @@ export const createApplication = async (
 	}
 };
 
+export async function getEmployerByRank(): Promise<EmployerResponse[]> {
+	try {
+		const response: AxiosResponse<EmployerResponse[]> = await api.get("/employer/list-employer-by-rank", {
+			headers: getHeader(),
+		});
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to fetch employers by rank with status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error fetching employers by rank:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+interface EmployerResponse {
+	id: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	birthDate: Date;
+	gender: string;
+	telephone: string;
+	addressId: string;
+	companyName: string;
+	avatar: string ;
+	rank: string;
+}

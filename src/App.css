@@ -17,7 +17,6 @@ body {
   justify-content: space-between;
   background-color: white;
   align-items: center;
-  width: 100%;
   height: 75px;
   padding-left: 30px;
 }
@@ -55,7 +54,7 @@ body {
   flex-direction: center;
   display: flex;
   color: black;
-  padding-right: 60px;
+  padding-right: 30px;
   font-size: 13;
 }
 
@@ -454,7 +453,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding-bottom: 50px;
+  padding-bottom: 15px;
 }
 
 .main-form-job-header {
@@ -514,11 +513,9 @@ body {
 }
 
 .main-form-job-filter {
-  align-items: flex-start;
   display: flex;
-  gap: 78px;
-  justify-content: space-between;
-  margin-bottom: 4px;
+  gap: 172px;
+  margin-bottom: 10px;
   align-items: center;
 }
 
@@ -577,7 +574,7 @@ body {
 .main-form-job-filter-box-map-list-location {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 13px;
   flex-grow: 1;
 }
 
@@ -703,6 +700,54 @@ body {
 
 .main-page-number {
   color: #32CD32;
+}
+
+.slider-container {
+  max-width: 1110px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.slider-item {
+  padding: 0 5px; 
+  box-sizing: border-box; 
+}
+
+.slider-image {
+  width: 100%;
+  height: 200px; 
+  object-fit: cover; 
+  border-radius: 10px; 
+}
+
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  font-size: 24px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 5px;
+  color: #333;
+}
+
+.custom-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.slick-slide > div {
+  margin-right: 0;
+}
+
+.form-container {
+  background: #f7f7f7;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .footer {

@@ -19,6 +19,7 @@ interface EmployerResponse {
   addressId: string;
   companyName: string;
   avatar: string | null;
+  rank: string;
 }
 
 interface Job {
@@ -144,15 +145,10 @@ const JobList: React.FC = () => {
             <div className='main-form-job-filter-box-map-localtion'>
               <div className='main-form-job-filter-box-map-list-location'>
                 <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handlePrevAddressPage} />
-                {currentAddresses.map((address, index) => (
-                  <div
-                    key={address.id}
-                    className={`main-form-job-filter-box-map-list-location-item ${activeIndex === index ? 'active' : ''}`}
-                    onClick={() => handleClick(index)}
-                  >
-                    {address.name}
-                  </div>
-                ))}
+                <div className={`main-form-job-filter-box-map-list-location-item`}>Hà Nội</div>
+                <div className={`main-form-job-filter-box-map-list-location-item`}>Thành phố Hồ Chí Minh</div>
+                <div className={`main-form-job-filter-box-map-list-location-item`}>Miền Bắc</div>
+                <div className={`main-form-job-filter-box-map-list-location-item`}>Miền Nam</div>
                 <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handleNextAddressPage} />
               </div>
             </div>

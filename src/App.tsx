@@ -14,8 +14,10 @@ import "./index.css";
 import "./assets/auth/auth.css";
 import "./assets/job/profileJob.css"
 import "./assets/cv/cv.css"
+import "./assets/cv/myCv.css"
 import "./assets/employer/employer.css"
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import MyCv from './components/MyCv/MyCv';
 
 const AppContent = () => {
   const location = useLocation();
@@ -32,6 +34,7 @@ const AppContent = () => {
         <Route path='/viec-lam' element={<Job/>} />
         <Route path='/quan-ly-cv' element={<CvManager/>} />
         <Route path='/cong-ty' element={<Employer />} />
+        <Route path='/cv-cua-toi' element={<MyCv />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}
