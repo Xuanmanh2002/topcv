@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { getAllJob, getAllCategory, getAllAddress, createApplication } from '../utils/ApiFunctions';
+import { getJobById, getAllCategory, getAllAddress, createApplication } from '../utils/ApiFunctions';
 import { Link } from 'react-router-dom';
 import { FaDollarSign, FaMapMarkerAlt, FaChevronRight, FaCube } from 'react-icons/fa';
 import { CiHeart, CiClock1, CiBellOn } from "react-icons/ci";
@@ -10,8 +10,10 @@ import { RiEditBoxLine } from "react-icons/ri";
 import { FaLocationDot } from "react-icons/fa6";
 import SearchForm from './SearchForm';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileJob = () => {
+  const navigate = useNavigate();
   interface Category {
     id: number;
     categoryName: string;
@@ -33,6 +35,8 @@ const ProfileJob = () => {
     addressId: string;
     companyName: string;
     avatar: string | null;
+    scale: String;
+    fieldActivity: String;
   }
 
   interface Job {
@@ -47,13 +51,16 @@ const ProfileJob = () => {
     createAt: Date;
     employerEmail?: string;
     employerResponse: EmployerResponse;
+    ranker: string;
+    quantity: number;
+    workingForm: string;
+    gender: string;
   }
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [jobs, setJobs] = useState<Job | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -71,7 +78,7 @@ const ProfileJob = () => {
 
   const handleSubmitApplication = async (e: FormEvent) => {
     e.preventDefault();
-    if (!selectedJob || !cv) {
+    if (!jobs || !cv) {
       setApplicationError("Chọn công việc và CV hợp lệ trước khi nộp.");
       return;
     }
@@ -79,11 +86,12 @@ const ProfileJob = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        setApplicationError("Token không hợp lệ. Vui lòng đăng nhập lại.");
+        setApplicationError("Vui lòng đăng nhập để nộp hồ sơ.");
+        navigate('dang-nhap', { state: { message: "Vui lòng đăng nhập để nộp hồ sơ." } });
         return;
       }
 
-      const response = await createApplication(fullName, email, telephone, letter, cv, Number(selectedJob.id), token); // Include the token
+      const response = await createApplication(fullName, email, telephone, letter, cv, jobs.id, token);
       setApplicationSuccess("Nộp hồ sơ thành công!");
       setApplicationError(null);
     } catch (error: any) {
@@ -92,6 +100,11 @@ const ProfileJob = () => {
   };
 
   const openModal = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate('/dang-nhap', { state: { message: "Vui lòng đăng nhập để ứng tuyển." } });
+      return;
+    }
     setIsModalOpen(true);
   };
 
@@ -104,15 +117,16 @@ const ProfileJob = () => {
   };
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    const fetchJobData = async () => {
       try {
-        const jobData = await getAllJob();
-        setJobs(jobData);
-        if (jobData.length > 0) {
-          setSelectedJob(jobData[0]);
+        const jobId = Number(localStorage.getItem("id"));
+        if (isNaN(jobId)) {
+          throw new Error("ID không hợp lệ.");
         }
+        const jobData = await getJobById(jobId);
+        setJobs(jobData);
       } catch (error) {
-        console.error("Error fetching jobs:", error);
+        console.error("Error fetching job data:", error);
       }
     };
 
@@ -134,13 +148,13 @@ const ProfileJob = () => {
       }
     };
 
-    fetchJobs();
+    fetchJobData();
     fetchAddresses();
     fetchCategories();
   }, []);
 
-  const formattedDeadline = selectedJob?.applicationDeadline
-    ? format(new Date(selectedJob.applicationDeadline), 'dd/MM/yyyy')
+  const formattedDeadline = jobs?.applicationDeadline
+    ? format(new Date(jobs.applicationDeadline), 'dd/MM/yyyy')
     : "Not specified";
   return (
     <div className='container'>
@@ -157,20 +171,20 @@ const ProfileJob = () => {
                 Tìm việc làm
               </Link>
               <FaChevronRight className="icon-divider" />
-              <Link className="job-link-namejob" to={`/jobs/${selectedJob?.id}`} style={{ color: "black", fontWeight: "bold" }}>
-                {selectedJob?.jobName || "Job Name"}
+              <Link className="job-link-namejob" to={`/jobs/${jobs?.id}`} style={{ color: "black", fontWeight: "bold" }}>
+                {jobs?.jobName || "Job Name"}
               </Link>
             </div>
             <div className='job-company-profile'>
               <div className='job-company-profile-description'>
                 <div className="job-card">
-                  <h3>{selectedJob?.jobName || "Job Title Placeholder"}</h3>
+                  <h3>{jobs?.jobName || "Job Title Placeholder"}</h3>
                   <div className="job-info">
                     <p>
                       <FaDollarSign />
                       <a className='job-price'>
                         Mức lương
-                        <span>{selectedJob?.price || "Not specified"}</span>
+                        <span>{jobs?.price || "Not specified"}</span>
                       </a>
                     </p>
                     <p>
@@ -178,7 +192,7 @@ const ProfileJob = () => {
                       <a className='job-location'>
                         Địa điểm
                         <span>{
-                          addresses.find((addr) => addr.id === Number(selectedJob?.employerResponse?.addressId))?.name || "Unknown"
+                          addresses.find((addr) => addr.id === Number(jobs?.employerResponse?.addressId))?.name || "Unknown"
                         }</span>
                       </a>
                     </p>
@@ -186,7 +200,7 @@ const ProfileJob = () => {
                       <HourglassOutlined />
                       <a className='job-experience'>
                         Kinh nghiệm
-                        <span>{selectedJob?.experience || "Not specified"}</span>
+                        <span>{jobs?.experience || "Not specified"}</span>
                       </a>
                     </p>
                   </div>
@@ -205,11 +219,11 @@ const ProfileJob = () => {
                       <div className="modal-job-overlay">
                         <div className="modal-job-content">
                           <div className='modal-job-name-button'>
-                            <h2>Ứng tuyển <span>{selectedJob?.jobName || "Job Name"}</span></h2>
+                            <h2>Ứng tuyển <span>{jobs?.jobName || "Job Name"}</span></h2>
                             <button onClick={closeModal} className="modal-job-close-button">×</button>
                           </div>
                           {applicationError && <p className="error-message">{applicationError}</p>}
-                            {applicationSuccess && <p className="success-message">{applicationSuccess}</p>}
+                          {applicationSuccess && <p className="success-message">{applicationSuccess}</p>}
                           <form className="modal-job-apply-form" onSubmit={handleSubmitApplication}>
                             <div className="modal-job-form-section">
                               <label className="modal-job-upload-label">Chọn CV để ứng tuyển:</label>
@@ -256,7 +270,7 @@ const ProfileJob = () => {
                   </div>
                   <div className='job-desctiption-recruitment'>
                     <a>Mô tả công việc</a>
-                    <p>- <span>{selectedJob?.recruitmentDetails || "Not specified"}</span></p>
+                    <p>- <span>{jobs?.recruitmentDetails || "Not specified"}</span></p>
                   </div>
                   <div className="job-desctiption-recruitment-deadline">
                     <a>
@@ -286,19 +300,19 @@ const ProfileJob = () => {
                     <div className='job-company-image'>
                       <img
                         className="job-company-logo"
-                        src={selectedJob?.employerResponse.avatar ? `data:image/jpeg;base64,${selectedJob?.employerResponse.avatar}` : "default-avatar-url.jpg"}
-                        alt={selectedJob?.jobName}
+                        src={jobs?.employerResponse.avatar ? `data:image/jpeg;base64,${jobs?.employerResponse.avatar}` : "default-avatar-url.jpg"}
+                        alt={jobs?.jobName}
                       />
                     </div>
-                    <h4>{selectedJob?.employerResponse.companyName || "Company Name"}</h4>
+                    <h4>{jobs?.employerResponse.companyName || "Company Name"}</h4>
                   </div>
                   <div className='company-info-form'>
                     <div>
-                      <p className="icon-text"><MdOutlineSupervisorAccount /> <span>Quy mô: 25-99 nhân viên</span></p>
-                      <p className="icon-text"><FaCube /> <span>Lĩnh vực: Thiết kế / kiến trúc</span></p>
+                      <p className="icon-text"><MdOutlineSupervisorAccount /> <span>Quy mô: {jobs?.employerResponse.scale || "Company Name"} nhân viên</span></p>
+                      <p className="icon-text"><FaCube /> <span>Lĩnh vực: {jobs?.employerResponse.fieldActivity || "Company Name"}</span></p>
                       <p className="icon-text"><FaLocationDot /> <span>Địa điểm:</span>
                         <span style={{ marginLeft: '4px' }}>
-                          {addresses.find(addr => addr.id === Number(selectedJob?.employerResponse?.addressId))?.name || "Unknown"}
+                          {addresses.find(addr => addr.id === Number(jobs?.employerResponse?.addressId))?.name || "Unknown"}
                         </span>
                       </p>
                     </div>
@@ -310,11 +324,11 @@ const ProfileJob = () => {
 
                 <div className="general-info">
                   <h4>Thông tin chung</h4>
-                  <p>Cấp bậc: Nhân viên</p>
-                  <p>Kinh nghiệm: {selectedJob?.experience || "Không yêu cầu"}</p>
-                  <p>Số lượng tuyển: 3 người</p>
-                  <p>Hình thức làm việc: Toàn thời gian</p>
-                  <p>Giới tính: Không yêu cầu</p>
+                  <p>Cấp bậc: {jobs?.ranker}</p>
+                  <p>Kinh nghiệm: {jobs?.experience || "Không yêu cầu"} năm</p>
+                  <p>Số lượng tuyển: {jobs?.quantity} người</p>
+                  <p>Hình thức làm việc: {jobs?.workingForm}</p>
+                  <p>Giới tính: {jobs?.gender}</p>
                 </div>
               </div>
             </div>

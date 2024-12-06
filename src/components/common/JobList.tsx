@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
 import { getAllJob, getAllAddress } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
+import { FaChevronDown } from "react-icons/fa";
 
 interface Address {
   id: string;
@@ -23,7 +24,7 @@ interface EmployerResponse {
 }
 
 interface Job {
-  id: string;
+  id: number;
   jobName: string;
   experience: string;
   applicationDeadline: Date;
@@ -34,6 +35,10 @@ interface Job {
   createAt: Date;
   employerEmail?: string;
   employerResponse: EmployerResponse;
+  ranker: string;
+  quantity: number;
+  workingForm: string;
+  gender: string;
 }
 
 const JobList: React.FC = () => {
@@ -69,10 +74,6 @@ const JobList: React.FC = () => {
     fetchAddresses();
   }, []);
 
-  const handleClick = (index: number) => {
-    setActiveIndex(index);
-  };
-
   const handleNextJobPage = () => {
     if (currentJobPage < Math.ceil(jobs.length / jobsPerPage)) {
       setCurrentJobPage(currentJobPage + 1);
@@ -105,6 +106,13 @@ const JobList: React.FC = () => {
   const indexOfFirstAddress = indexOfLastAddress - addressesPerPage;
   const currentAddresses = addresses.slice(indexOfFirstAddress, indexOfLastAddress);
 
+  const handleJobClick = (jobName: string, id: number) => {
+    localStorage.setItem('jobName', jobName);
+    localStorage.setItem('id', id.toString());  
+    console.log(jobName, id);
+    navigate(`/viec-lam/${jobName}`);
+  };
+
   return (
     <div className='container'>
       <div className='main-form-job'>
@@ -133,12 +141,15 @@ const JobList: React.FC = () => {
                   Lọc theo:
                 </span>
               </div>
-              <select className='main-form-job-filter-item-input-selected' tabIndex={-1} aria-hidden="true">
-                <option value="cities">Địa điểm</option>
-                <option value="salary">Mức lương</option>
-                <option value="experience">Kinh nghiệm</option>
-                <option value="categoriesJob">Ngành nghề</option>
-              </select>
+              <div className="main-form-job-filter-item-select-wrapper">
+                <select className='main-form-job-filter-item-input-selected' tabIndex={-1} aria-hidden="true">
+                  <option value="cities">Địa điểm</option>
+                  <option value="salary">Mức lương</option>
+                  <option value="experience">Kinh nghiệm</option>
+                  <option value="categoriesJob">Ngành nghề</option>
+                </select>
+                <FaChevronDown className="dropdown-icon" />
+              </div>
             </div>
           </div>
           <div className='main-form-job-filter-box-map'>
@@ -165,7 +176,7 @@ const JobList: React.FC = () => {
                 />
                 <div className="main-form-job-list-grid-item-details">
                   <h3 className="main-form-job-list-grid-item-title"
-                    onClick={() => navigate(`/viec-lam/${job.jobName}`)}
+                    onClick={() => handleJobClick(job.jobName, job.id)}
                     style={{ cursor: 'pointer' }}>
                     {job.jobName.length > 23 ? job.jobName.slice(0, 23) + '...' : job.jobName}
                   </h3>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Checkbox, Form, Input, Select, Upload, notification } from 'antd';
-import { MailOutlined, UserOutlined, PhoneOutlined, HomeOutlined, IdcardOutlined, LockOutlined, GoogleOutlined, FacebookOutlined, LinkedinOutlined, UploadOutlined } from '@ant-design/icons';
+import { MailOutlined, UserOutlined, PhoneOutlined, IdcardOutlined, LockOutlined, GoogleOutlined, FacebookOutlined, LinkedinOutlined, UploadOutlined } from '@ant-design/icons';
 import SidebarAuth from '../layout/Sidebar';
 import { useNavigate } from "react-router-dom";
 import { registerCustomer, getAllAddress } from '../utils/ApiFunctions';

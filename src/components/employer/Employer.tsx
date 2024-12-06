@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Button, Card, Row, Col, Typography, Space, Spin, message } from 'antd';
+import { Input, Button, Space, Typography, Spin, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { getEmployerByRank } from '../utils/ApiFunctions';
 import company from '../../assets/img/company-billBoard.webp';
 
@@ -7,7 +8,7 @@ const { Search } = Input;
 const { Title, Paragraph } = Typography;
 
 interface EmployerResponse {
-  id: string;
+  id: number;
   email: string;
   firstName: string;
   lastName: string;
@@ -16,8 +17,10 @@ interface EmployerResponse {
   telephone: string;
   addressId: string;
   companyName: string;
-  avatar: string | null;
+  avatar: string;
   rank: string;
+  scale: string;
+  fieldActivity: String;
 }
 
 const Employer = () => {
@@ -25,6 +28,7 @@ const Employer = () => {
   const [filteredEmployers, setFilteredEmployers] = useState<EmployerResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployers = async () => {
@@ -33,8 +37,8 @@ const Employer = () => {
         setEmployers(data);
         setFilteredEmployers(data);
       } catch (error: any) {
-        setError("Error fetching employers by rank.");
-        message.error("Failed to fetch employers.");
+        setError('Error fetching employers by rank.');
+        message.error('Failed to fetch employers.');
       } finally {
         setLoading(false);
       }
@@ -44,10 +48,17 @@ const Employer = () => {
   }, []);
 
   const handleSearch = (value: string) => {
-    const filtered = employers.filter(employer =>
+    const filtered = employers.filter((employer) =>
       employer.companyName.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredEmployers(filtered);
+  };
+
+  const handleCompanyClick = (companyName: string, email: string) => {
+    localStorage.setItem('companyName', companyName);
+    localStorage.setItem('email', email);
+    console.log(companyName, email);
+    navigate(`/cong-ty/${companyName}`);
   };
 
   return (
@@ -101,7 +112,11 @@ const Employer = () => {
             <p>{error}</p>
           ) : (
             filteredEmployers.map((employer) => (
-              <div key={employer.id} className="company-card">
+              <div
+                key={employer.id}
+                className="company-card"
+                onClick={() => handleCompanyClick(employer.companyName, employer.email)}
+              >
                 <img
                   alt={employer.companyName}
                   src={employer.avatar ? `data:image/png;base64,${employer.avatar}` : '/default-avatar.png'}

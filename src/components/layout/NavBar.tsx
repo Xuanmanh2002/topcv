@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { DoubleRightOutlined, DownOutlined, BellOutlined, MessageOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { AuthContext } from '../auth/AuthProvider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
     const [showAccount, setShowAccount] = useState(false);
-    const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
     const [customer, setCustomer] = useState({
         adminId: "",
         firstName: "",
@@ -17,6 +16,7 @@ const Navbar = () => {
     const { handleLogout } = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const navigate = useNavigate();
+    const location = useLocation();  // Use useLocation to track the current path
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -30,16 +30,10 @@ const Navbar = () => {
             email: localStorage.getItem("email") || "",
         };
         setCustomer(storedCustomer);
-        const storedMenu = localStorage.getItem("selectedMenu");
-        if (storedMenu) {
-            setSelectedMenu(storedMenu);
-        }
     }, []);
 
     const handleMenuClick = (menu: string, path: string) => {
-        setSelectedMenu(menu);
-        localStorage.setItem("selectedMenu", menu);
-        navigate(path);
+        navigate(path); // Navigate to the new path
     };
 
     const toggleDropdown = () => {
@@ -48,7 +42,12 @@ const Navbar = () => {
 
     const handleLogoutClick = () => {
         handleLogout();
-        navigate('/login');
+        navigate('/dang-nhap');
+    };
+
+    // Get the current path to highlight the active menu
+    const getMenuColor = (menu: string) => {
+        return location.pathname === menu ? 'green' : 'black';
     };
 
     return (
@@ -62,27 +61,27 @@ const Navbar = () => {
                     </div>
                     <ul className="navbar-menu-item">
                         <li
-                            onClick={() => handleMenuClick("Việc làm", "/viec-lam")}
+                            onClick={() => handleMenuClick("/viec-lam", "/viec-lam")}
                             style={{
-                                color: selectedMenu === "Việc làm" ? 'green' : 'black',
+                                color: getMenuColor("/viec-lam"),
                                 cursor: 'pointer',
                             }}
                         >
                             Việc làm
                         </li>
                         <li
-                            onClick={() => handleMenuClick("Hồ sơ & CV", "/quan-ly-cv")}
+                            onClick={() => handleMenuClick("/quan-ly-cv", "/quan-ly-cv")}
                             style={{
-                                color: selectedMenu === "Hồ sơ & CV" ? 'green' : 'black',
+                                color: getMenuColor("/quan-ly-cv"),
                                 cursor: 'pointer',
                             }}
                         >
                             Hồ sơ & CV
                         </li>
                         <li
-                            onClick={() => handleMenuClick("Công ty", "/cong-ty")}
+                            onClick={() => handleMenuClick("/cong-ty", "/cong-ty")}
                             style={{
-                                color: selectedMenu === "Công ty" ? 'green' : 'black',
+                                color: getMenuColor("/cong-ty"),
                                 cursor: 'pointer',
                             }}
                         >
@@ -141,8 +140,8 @@ const Navbar = () => {
                                                 </div>
                                             </div>
                                             <ul>
-                                                <li>Cài đặt thông tin cá nhân</li>
-                                                <li onClick={() => handleMenuClick("Quản lí hồ sơ", "/cv-cua-toi")}>Quản lí hồ sơ xin việc</li>
+                                                <li onClick={() => handleMenuClick("/cai-dat-thong-tin-ca-nhan", "/cai-dat-thong-tin-ca-nhan")}>Cài đặt thông tin cá nhân</li>
+                                                <li onClick={() => handleMenuClick("/cv-cua-toi", "/cv-cua-toi")}>Quản lí hồ sơ xin việc</li>
                                                 <li>Kích hoạt quà tặng</li>
                                                 <li>Nhà tuyển dụng xem hồ sơ</li>
                                                 <li>Cài đặt gợi ý việc làm</li>

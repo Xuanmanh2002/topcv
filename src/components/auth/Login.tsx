@@ -1,25 +1,34 @@
-import React from 'react'
-import { Button, Checkbox, Form, Input, message } from 'antd';
+import React from 'react';
+import { Button, Checkbox, Form, Input, notification } from 'antd';
 import { MailOutlined, LockOutlined, GoogleOutlined, FacebookOutlined, LinkedinOutlined } from '@ant-design/icons';
-import SidebarAuth from '../layout/Sidebar'
+import SidebarAuth from '../layout/Sidebar';
 import { loginCustomer } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
+
+    const openNotification = (type: 'success' | 'error', message: string, description: string) => {
+        notification[type]({
+            message,
+            description,
+        });
+    };
+
     const onFinish = async (values: { email: string; password: string }) => {
         try {
             const customerData = await loginCustomer(values);
             if (customerData) {
-                message.success("Đăng nhập thành công!");
-                navigate("/");
+                openNotification('success', 'Đăng nhập thành công!', 'Bạn đã đăng nhập thành công');
+                navigate('/');
             } else {
-                message.error("Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.");
+                openNotification('error', 'Đăng nhập thất bại', 'Vui lòng kiểm tra thông tin đăng nhập và thử lại.');
             }
         } catch (error) {
-            message.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+            openNotification('error', 'Lỗi hệ thống', 'Có lỗi xảy ra trong quá trình đăng nhập. Vui lòng thử lại sau.');
         }
     };
+
     return (
         <div className="container-login">
             <div className="login-wrapper">
