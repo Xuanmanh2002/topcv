@@ -543,8 +543,7 @@
     padding-top: 10px;
 }
 
-.company-info,
-.general-info {
+.company-info {
     font-size: 14px;
     width: 100%;
     max-width: 352px;
@@ -553,6 +552,32 @@
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.general-info{
+    font-size: 14px;
+    width: 100%;
+    max-width: 352px;
+    background-color: white;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.general-info h4{
+    font-size: 20px;
+}
+
+.general-info-company span {
+    color: #212f3f;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: .175px;
+    line-height: 22px;
 }
 
 .company-link-button {

@@ -294,7 +294,7 @@ const Company: React.FC = () => {
                                                             <div className='company-job-price'>
                                                                 <h1>{job.ranker} {job.jobName} {job.workingForm} Kinh Nghiệm Trên {job.experience} năm Tại {addresses.find((addr) => addr.id === Number(job?.employerResponse?.addressId))?.name || "Unknown"
                                                                 }</h1>
-                                                                <span>{job.price} triệu</span>
+                                                                <span>{job.price}</span>
                                                             </div>
                                                             <div className='company-name-rank'>
                                                                 {['Gold', 'Diamond'].includes(job?.employerResponse?.rank?.toLowerCase()) && (

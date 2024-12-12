@@ -315,65 +315,97 @@ export async function getJobById(jobId: number): Promise<any> {
 }
 
 export async function getCustomerById(): Promise<any> {
-    try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            throw new Error("No authentication token found.");
-        }
-        const response = await api.get(`/api/customer/show-profile`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.status >= 200 && response.status < 300) {
-            return response.data;  
-        } else {
-            throw new Error(`Failed to fetch customer profile with status: ${response.status}`);
-        }
+	try {
+		const token = localStorage.getItem("token");
+		if (!token) {
+			throw new Error("No authentication token found.");
+		}
+		const response = await api.get(`/api/customer/show-profile`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+				"Content-Type": "application/json"
+			}
+		});
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to fetch customer profile with status: ${response.status}`);
+		}
 
-    } catch (error: any) {
-        console.error("Error fetching customer profile:", error);
-        throw new Error(error.response?.data?.message || error.message);
-    }
+	} catch (error: any) {
+		console.error("Error fetching customer profile:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
 }
 
 export async function updateCustomerProfile(
-    email: string, 
-    firstName: string,
-    lastName: string,
-    birthDateMillis: number | null,
-    gender: string,
-    telephone: string,
-    addressId: number,
-    avatar: File | null
+	email: string,
+	firstName: string,
+	lastName: string,
+	birthDateMillis: number | null,
+	gender: string,
+	telephone: string,
+	addressId: number,
+	avatar: File | null
 ): Promise<any> {
-    const formData = new FormData();
-    formData.append("email", email); 
-    formData.append("firstName", firstName);
-    formData.append("lastName", lastName);
+	const formData = new FormData();
+	formData.append("email", email);
+	formData.append("firstName", firstName);
+	formData.append("lastName", lastName);
 
-    if (birthDateMillis) {
-        formData.append("birthDate", birthDateMillis.toString());
-    }
+	if (birthDateMillis) {
+		formData.append("birthDate", birthDateMillis.toString());
+	}
 
-    formData.append("gender", gender);
-    formData.append("telephone", telephone);
-    formData.append("addressId", addressId.toString());
-    if (avatar) {
-        formData.append("avatar", avatar);
-    }
+	formData.append("gender", gender);
+	formData.append("telephone", telephone);
+	formData.append("addressId", addressId.toString());
+	if (avatar) {
+		formData.append("avatar", avatar);
+	}
 
-    try {
-        const response = await api.put("/api/customer/update", formData, {
-            headers: {
-                ...getHeader(),
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        return response.data;
-    } catch (error: any) {
-        console.error("Error updating customer profile:", error);
-        throw new Error(error.response?.data?.message || error.message);
-    }
+	try {
+		const response = await api.put("/api/customer/update", formData, {
+			headers: {
+				...getHeader(),
+				"Content-Type": "multipart/form-data",
+			},
+		});
+		return response.data;
+	} catch (error: any) {
+		console.error("Error updating customer profile:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+
+export async function getActiveJobsByEmployer(employerId: number): Promise<number> {
+	try {
+		const response = await api.get("/employer/job/jobs-find-by-employer", {
+			params: {
+				adminId: employerId
+			},
+			headers: getHeader()
+		});
+
+		return response.data;
+	} catch (error: any) {
+		console.error("Error fetching active jobs:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+
+export async function getActiveJobsByCategory(categoryId: number): Promise<number> {
+	try {
+		const response = await api.get("/employer/job/count-jobs-find-by-category", {
+			params: {
+				categoryId: categoryId
+			},
+			headers: getHeader()
+		});
+
+		return response.data;
+	} catch (error: any) {
+		console.error("Error fetching active jobs:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
 }

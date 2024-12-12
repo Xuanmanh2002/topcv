@@ -1,0 +1,122 @@
+@media (min-width: 1200px) {
+    .slider-employer-container {
+        width: 1140px;
+    }
+}
+
+.slider-employer-container {
+    padding-top: 40px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.diamond-employer-header {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.diamond-employer-title {
+    color: #00b14f;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.diamond-employer-body {
+    align-items: center;
+    display: flex !important;
+    justify-items: center;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    z-index: 1;
+}
+
+.diamond-employer-outer {
+    margin: 0 -12px;
+    padding: 12px 12px 30px;
+    position: relative;
+    overflow: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+.diamond-employer-stage {
+    transform: translate3d(-2320px, 0px, 0px);
+    transition: 1.25s;
+    width: 6496px;
+    position: relative;
+    touch-action: manipulation;
+}
+
+.diamond-employer-item {
+    width: 212px;
+    margin-right: 20px;
+    touch-action: pan-y;
+    user-select: none;
+    min-height: 1px;    
+}
+
+.diamond-employer-banner {
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #dee0e2;
+    border-radius: 10px;
+    display: flex;
+    height: 204px;
+    margin-bottom: 24px;
+    position: relative;
+    width: 218px;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.diamond-employer-icon {
+    align-items: center;
+    background: #00b14f;
+    border-radius: 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    gap: 4px;
+    height: 20px;
+    justify-content: center;
+    left: 12px;
+    line-height: 16px;
+    padding: 2px 6px 2px 4px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 12px;
+    width: 53px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.diamond-employer-icon-diamond {
+    font-weight: 900;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+}
+
+.diamond-employer-img {
+    display: block;
+    max-height: 110px !important;
+    object-fit: contain !important;
+    max-width: 180px !important;
+    max-height: 110px !important;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    border: 0;
+}

@@ -156,6 +156,13 @@ const ProfileJob = () => {
   const formattedDeadline = jobs?.applicationDeadline
     ? format(new Date(jobs.applicationDeadline), 'dd/MM/yyyy')
     : "Not specified";
+
+  const handleCompanyClick = (companyName: string, email: string) => {
+    localStorage.setItem('companyName', companyName);
+    localStorage.setItem('email', email);
+    console.log(companyName, email);
+    navigate(`/cong-ty/${companyName}`);
+  };
   return (
     <div className='container'>
       <div className="job-detail-layout">
@@ -167,7 +174,7 @@ const ProfileJob = () => {
                 Trang chủ
               </Link>
               <FaChevronRight className="icon-divider" />
-              <Link className="job-link" to="/jobs">
+              <Link className="job-link" to="/viec-lam">
                 Tìm việc làm
               </Link>
               <FaChevronRight className="icon-divider" />
@@ -317,18 +324,33 @@ const ProfileJob = () => {
                       </p>
                     </div>
                   </div>
-                  <div className='company-link-button'>
-                    <button className="link-button">Xem trang công ty <RiEditBoxLine /></button>
-                  </div>
+                  {jobs?.employerResponse && (
+                    <div
+                      key={jobs.employerResponse.id}
+                      onClick={() =>
+                        handleCompanyClick(
+                          jobs.employerResponse.companyName,
+                          jobs.employerResponse.email
+                        )
+                      }
+                      className="company-link-button"
+                    >
+                      <button className="link-button">
+                        Xem trang công ty <RiEditBoxLine />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="general-info">
                   <h4>Thông tin chung</h4>
-                  <p>Cấp bậc: {jobs?.ranker}</p>
-                  <p>Kinh nghiệm: {jobs?.experience || "Không yêu cầu"} năm</p>
-                  <p>Số lượng tuyển: {jobs?.quantity} người</p>
-                  <p>Hình thức làm việc: {jobs?.workingForm}</p>
-                  <p>Giới tính: {jobs?.gender}</p>
+                  <div className='general-info-company'>
+                    <p>Cấp bậc: <span> {jobs?.ranker} </span> </p>
+                    <p>Kinh nghiệm: <span>{jobs?.experience || "Không yêu cầu"} năm</span></p>
+                    <p>Số lượng tuyển: <span>{jobs?.quantity} người</span></p>
+                    <p>Hình thức làm việc: <span>{jobs?.workingForm}</span></p>
+                    <p>Giới tính: <span>{jobs?.gender}</span></p>
+                  </div>
                 </div>
               </div>
             </div>

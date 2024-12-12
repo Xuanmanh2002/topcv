@@ -3,8 +3,10 @@ import { SearchOutlined, EnvironmentOutlined, AppstoreAddOutlined, HeartOutlined
 import { Select, Input, Button, Typography } from 'antd';
 import { getAllJob, getAllAddress, getAllCategory } from '../utils/ApiFunctions';
 import JobList from '../common/JobList';
-import Slider from '../common/Slider'
 import JobListLike from '../common/JobListLike';
+import ListEmployer from '../employer/ListEmployer';
+import ListCategory from '../category/ListCategory';
+import Slider from '../common/Slider'
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -135,6 +137,8 @@ const Job = () => {
             <JobList/>
             <Slider/>
             <JobListLike/>
+            <ListEmployer />
+            <ListCategory />
         </main>
     );
 };

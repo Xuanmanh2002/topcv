@@ -3,6 +3,7 @@ import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant
 import { getAllJob, getAllAddress } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
 import { FaChevronDown } from "react-icons/fa";
+import Slider from '../common/Slider'
 
 interface Address {
   id: string;
@@ -108,7 +109,7 @@ const JobList: React.FC = () => {
 
   const handleJobClick = (jobName: string, id: number) => {
     localStorage.setItem('jobName', jobName);
-    localStorage.setItem('id', id.toString());  
+    localStorage.setItem('id', id.toString());
     console.log(jobName, id);
     navigate(`/viec-lam/${jobName}`);
   };
@@ -127,8 +128,8 @@ const JobList: React.FC = () => {
             </div>
             <div className='main-form-job-header-item-page-size'>
               <a className="main-form-job-header-item-page-size-see-more">Xem tất cả</a>
-              <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
-              <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" />
+              <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handlePrevJobPage} />
+              <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handleNextJobPage}/>
             </div>
           </div>
         </section>
@@ -178,16 +179,20 @@ const JobList: React.FC = () => {
                   <h3 className="main-form-job-list-grid-item-title"
                     onClick={() => handleJobClick(job.jobName, job.id)}
                     style={{ cursor: 'pointer' }}>
-                    {job.jobName.length > 23 ? job.jobName.slice(0, 23) + '...' : job.jobName}
+                    {job.jobName}
                   </h3>
                   <p className="main-form-job-list-grid-item-company">{job.employerResponse.companyName}</p>
                   <div className="main-form-job-list-grid-item-info">
-                    <p className="main-form-job-list-grid-item-info-location">
-                      {
-                        addresses.find(address => address.id === job.employerResponse.addressId)?.name || "Địa chỉ không xác định"
-                      }
-                    </p>
-                    <p className="main-form-job-list-grid-item-info-salary">{job.price} VNĐ</p>
+                    <div className='main-form-job-footer'>
+                      <p className="main-form-job-list-grid-item-info-location">
+                        {
+                          addresses.find(address => address.id === job.employerResponse.addressId)?.name || "Địa chỉ không xác định"
+                        }
+                      </p>
+                      <p className="main-form-job-list-grid-item-info-salary">
+                        {job.price}
+                      </p>
+                    </div>
                     <HeartOutlined className="main-form-job-list-grid-item-info-icon" />
                   </div>
                 </div>
