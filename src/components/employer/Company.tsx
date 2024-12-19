@@ -292,8 +292,13 @@ const Company: React.FC = () => {
                                                         </div>
                                                         <div>
                                                             <div className='company-job-price'>
-                                                                <h1>{job.ranker} {job.jobName} {job.workingForm} Kinh Nghiệm Trên {job.experience} năm Tại {addresses.find((addr) => addr.id === Number(job?.employerResponse?.addressId))?.name || "Unknown"
-                                                                }</h1>
+                                                                <h1>
+                                                                    {job?.jobName
+                                                                        ? job.jobName.length > 50
+                                                                            ? job.jobName.substring(0, 50) + "..."
+                                                                            : job.jobName
+                                                                        : "Loading..."}
+                                                                </h1>
                                                                 <span>{job.price}</span>
                                                             </div>
                                                             <div className='company-name-rank'>

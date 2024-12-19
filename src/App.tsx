@@ -27,6 +27,9 @@ import MyCv from './components/application/MyCv';
 import Company from './components/employer/Company';
 import Profile from './components/profile/Profile';
 import JobSearch from './components/job/JobSearch';
+import JobCategory from './components/job/JobCategory';
+import JobLocation from './components/job/JobLocation';
+import JobLocationCategory from './components/job/JobLocationCategory';
 
 const AppContent = () => {
   const location = useLocation();
@@ -47,6 +50,9 @@ const AppContent = () => {
         <Route path='/cong-ty/:companyName' element={<Company />} />
         <Route path='/cai-dat-thong-tin-ca-nhan' element={<Profile />}/>
         <Route path='/tim-viec-lam-moi-nhat' element={<JobSearch />}/>
+        <Route path='/tim-viec-lam/:categoryId' element={<JobCategory />}/>
+        <Route path='/tim-viec-lam-tai/:addressId' element={<JobLocation />}/>
+        <Route path='/tim-viec-lam/:categoryId-tai/:addressId' element={<JobLocationCategory/>}/>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}

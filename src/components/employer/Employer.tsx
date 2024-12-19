@@ -47,7 +47,7 @@ const Employer = () => {
     fetchEmployers();
   }, []);
 
-  const handleSearch = (value: string) => {
+  const handleSearch = (value: string) => {                                                                                                       
     const filtered = employers.filter((employer) =>
       employer.companyName.toLowerCase().includes(value.toLowerCase())
     );

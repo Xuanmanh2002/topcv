@@ -77,7 +77,7 @@
 }
 
 .job-search-icon-describe {
-    padding-left: 15px;
+    padding-left: 20px;
     color: #212f3f;
     display: inline;
     font-family: Inter, sans-serif;
@@ -386,7 +386,7 @@
     cursor: pointer;
 }
 
-.job-search-body-box-name a{
+.job-search-body-box-name a {
     font-feature-settings: "liga" off, "clig" off;
     color: #263a4d;
     font-size: 16px;
@@ -402,9 +402,9 @@
     font-size: 13px;
     justify-content: center;
     align-items: center;
-    width: 30px; 
-    height: 30px; 
-    border-radius: 50%; 
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     background-color: #00b14f;
 }
 
@@ -526,7 +526,7 @@
     font-weight: 700;
 }
 
-.job-search-exp span{
+.job-search-exp span {
     font-feature-settings: "liga" off, "clig" off;
     font-size: 12px;
     font-style: normal;
@@ -593,4 +593,181 @@
     line-height: 14px;
     position: relative;
     top: -1px;
+}
+
+.eye-button {
+    background: #fff;
+    border: 1px solid #b3b8bd;
+    border-radius: 50%;
+    color: #263a4d;
+    height: 32px;
+    padding: 5px;
+    width: 32px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+
+.eye-button-basic {
+    color: #7f878f;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+}
+
+.box-save-job {
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+}
+
+.job-save-button {
+    align-items: center;
+    border: 1px solid #00b14f;
+    border-radius: 50%;
+    color: #00b14f;
+    display: inline-flex;
+    font-size: 16px;
+    height: 32px;
+    justify-content: center;
+    padding: 2px;
+    white-space: nowrap;
+    width: 32px;
+    text-decoration: none;
+    background: #f2fbf6;
+}
+
+.job-button-heart {
+    font-weight: 700;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+}
+
+.box-pagination {
+    display: block;
+}
+
+.pagination {
+    margin: 24px 0 8px;
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    padding-left: 0;
+    border-radius: 4px;
+}
+
+.pagination-disabled {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+}
+
+.button-left-page {
+    border: 1px solid #dee0e2;
+    color: #dee0e2;
+    align-items: center;
+    border-radius: 100%;
+    display: flex;
+    font-family: Font Awesome\ 6 Pro;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 900;
+    height: 32px;
+    justify-content: center;
+    line-height: 16px;
+    padding: 6px;
+    width: 32px;
+}
+
+@media screen and (min-width: 1024px) {
+    .button-left-page {
+        background: #f3f5f7;
+    }
+}
+
+.box-page-number {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (min-width: 1024px) {
+    .page-number {
+        background: #f3f5f7;
+    }
+}
+
+.page-number {
+    border: unset;
+    color: #a6acb2;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+}
+
+.page-number-high-light {
+    color: #00b14f;
+    border: unset;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+    .page-number-high-light  {
+        background: #f3f5f7;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .button-right-page {
+        background: #f3f5f7;
+    }
+}
+
+.button-right-page {
+    border: 1px solid #00b14f;
+    color: #00b14f;
+    cursor: pointer;
+    transition: .3s;
+    align-items: center;
+    border-radius: 100%;
+    display: flex;
+    font-family: Font Awesome\ 6 Pro;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 900;
+    height: 32px;
+    justify-content: center;
+    line-height: 16px;
+    padding: 6px;
+    width: 32px;
+    position: relative;
+    float: left;
+    margin-left: -1px;
+    text-decoration: none;
 }

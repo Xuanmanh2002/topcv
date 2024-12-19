@@ -54,7 +54,7 @@ const MyCv: React.FC = () => {
       if (token) {
         const roleIsCustomer = await checkRoleCustomer(token);
         if (!roleIsCustomer) {
-          navigate('/dang-nhap'); 
+          navigate('/dang-nhap');
         }
         setHasRoleCustomer(roleIsCustomer);
       } else {
@@ -115,8 +115,8 @@ const MyCv: React.FC = () => {
         columns={[
           {
             title: 'Stt',
-            dataIndex: 'id',
-            key: 'id',
+            key: 'index',
+            render: (_, __, index) => index + 1, // Hiển thị số thứ tự từ 1
           },
           {
             title: 'Tên công việc',
@@ -143,12 +143,12 @@ const MyCv: React.FC = () => {
                 case 'Accepted':
                   color = 'green';
                   break;
-                case 'Rejected':
+                case 'Reject':
                   color = 'red';
                   break;
-                case 'Pending':
+                case 'RECEIVED':
                 default:
-                  color = 'gold';
+                  color = 'green';
                   break;
               }
               return <Tag color={color}>{status.toUpperCase()}</Tag>;
@@ -165,13 +165,13 @@ const MyCv: React.FC = () => {
             key: 'actions',
             render: (_, record) => (
               <Space size="middle">
-                <a href="#edit" className="anticon-edit"><EditOutlined /></a>
                 <a href="#delete" className="anticon-delete"><DeleteOutlined /></a>
               </Space>
             ),
           },
         ]}
       />
+
     </div>
   );
 };
