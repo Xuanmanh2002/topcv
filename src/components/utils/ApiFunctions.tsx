@@ -164,7 +164,6 @@ export async function getEmailByCompanyName(companyName: string): Promise<string
 		});
 
 		if (response.status >= 200 && response.status < 300) {
-			// Trả về email của employer
 			return response.data;
 		} else {
 			throw new Error(`Failed to fetch email with status: ${response.status}`);
@@ -412,21 +411,21 @@ export async function getActiveJobsByCategory(categoryId: number): Promise<numbe
 
 
 export interface Job {
-	id: number; 
-	jobName: string; 
-	experience: string; 
-	applicationDeadline: Date; 
-	recruitmentDetails: string; 
-	price: string; 
-	employerId: string; 
-	categoryId: string; 
-	createAt: Date; 
-	employerEmail?: string; 
-	employerResponse: EmployerResponse; 
-	ranker: string; 
-	quantity: number; 
+	id: number;
+	jobName: string;
+	experience: string;
+	applicationDeadline: Date;
+	recruitmentDetails: string;
+	price: string;
+	employerId: string;
+	categoryId: string;
+	createAt: Date;
+	employerEmail?: string;
+	employerResponse: EmployerResponse;
+	ranker: string;
+	quantity: number;
 	workingForm: string;
-	gender: string; 
+	gender: string;
 }
 
 export const getAllJobsByCategory = async (categoryId: number): Promise<Job[]> => {
@@ -436,7 +435,7 @@ export const getAllJobsByCategory = async (categoryId: number): Promise<Job[]> =
 			throw new Error("No authentication token found.");
 		}
 		const response: AxiosResponse<Job[]> = await api.get(`/employer/job/all-job-by-category`, {
-			headers: getHeader(), 
+			headers: getHeader(),
 			params: { categoryId },
 		});
 		if (response.status === 204 || !response.data) {
@@ -450,24 +449,6 @@ export const getAllJobsByCategory = async (categoryId: number): Promise<Job[]> =
 	}
 };
 
-export interface Job {
-	id: number; 
-	jobName: string; 
-	experience: string; 
-	applicationDeadline: Date; 
-	recruitmentDetails: string; 
-	price: string; 
-	employerId: string; 
-	categoryId: string; 
-	createAt: Date; 
-	employerEmail?: string; 
-	employerResponse: EmployerResponse; 
-	ranker: string; 
-	quantity: number; 
-	workingForm: string;
-	gender: string; 
-}
-
 export const getAllJobsByAddress = async (addressId: number): Promise<Job[]> => {
 	try {
 		const token = localStorage.getItem("token");
@@ -475,7 +456,7 @@ export const getAllJobsByAddress = async (addressId: number): Promise<Job[]> => 
 			throw new Error("No authentication token found.");
 		}
 		const response: AxiosResponse<Job[]> = await api.get(`/employer/job/all-job-by-addressId`, {
-			headers: getHeader(), 
+			headers: getHeader(),
 			params: { addressId },
 		});
 		if (response.status === 204 || !response.data) {
@@ -490,23 +471,152 @@ export const getAllJobsByAddress = async (addressId: number): Promise<Job[]> => 
 };
 
 export const getAllJobsByLocationAndCategory = async (categoryId: number, addressId: number): Promise<Job[]> => {
-    try {        
-        const response: AxiosResponse<Job[]> = await api.get(`/employer/job/all-job-by-location-and-category`, {
-            headers: getHeader(), 
-            params: { 
-                categoryId, 
-                addressId,   
-            },
-        });
-        
-        if (response.status === 204 || !response.data) {
-            return [];
-        }
-        
-        return response.data;
-    } catch (error: any) {
-        console.error("Error fetching jobs by category and location:", error);
-        const errorMessage = error.response?.data?.message || "Unable to fetch jobs by category and location.";
-        throw new Error(errorMessage);
-    }
+	try {
+		const response: AxiosResponse<Job[]> = await api.get(`/employer/job/all-job-by-location-and-category`, {
+			headers: getHeader(),
+			params: {
+				categoryId,
+				addressId,
+			},
+		});
+
+		if (response.status === 204 || !response.data) {
+			return [];
+		}
+
+		return response.data;
+	} catch (error: any) {
+		console.error("Error fetching jobs by category and location:", error);
+		const errorMessage = error.response?.data?.message || "Unable to fetch jobs by category and location.";
+		throw new Error(errorMessage);
+	}
 };
+
+interface Category {
+	id: number;
+	categoryName: string;
+	description: string;
+	createAt: string;
+	images: string | null;
+}
+
+export async function getCategoriesWithJobs(): Promise<Category[]> {
+	try {
+		const response = await api.get("/admin/category/with-jobs", {
+			headers: getHeader(),
+		});
+
+		if (response.status >= 200 && response.status < 300) {
+			const categories: Category[] = response.data;
+			return categories.map(category => ({
+				...category,
+				images: category.images
+					? `data:image/jpeg;base64,${category.images}`
+					: null,
+			}));
+		} else {
+			throw new Error(`Failed to fetch categories with status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error fetching categories with jobs:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+
+
+export async function getEmployersWithJobs(): Promise<EmployerResponse[]> {
+	try {
+		const response: AxiosResponse<EmployerResponse[]> = await api.get("/employer/with-jobs", {
+			headers: getHeader(),
+		});
+
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to fetch employers with jobs. Status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error fetching employers with jobs:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+
+
+
+export async function searchJobs(keyword: string): Promise<Job[]> {
+	try {
+		const response = await api.get("/employer/job/search", {
+			params: { keyword },
+			headers: getHeader(),
+		});
+
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to fetch jobs with status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error searching jobs:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+
+export interface Report {
+	fullName: string;
+	email: string;
+	telephone: string;
+	letter: string;
+	address: string;
+	jobId: number;
+}
+
+export const createReport = async (reportRequest: Report): Promise<any> => {
+	try {
+		const response = await api.post("/api/report/create-report", reportRequest, {
+			headers: getHeader(),
+		});
+
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to create report with status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error creating report:", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+};
+
+
+
+export async function getAllJobsGood(): Promise<Job[]> {
+	try {
+		const response: AxiosResponse<Job[]> = await api.get("/employer/job/job-service-good", {
+			headers: getHeader(),
+		});
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to fetch jobs with status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error fetching jobs (good):", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}
+
+export async function getAllJobsSexy(): Promise<Job[]> {
+	try {
+		const response: AxiosResponse<Job[]> = await api.get("/employer/job/job-service-sexy", {
+			headers: getHeader(),
+		});
+		if (response.status >= 200 && response.status < 300) {
+			return response.data;
+		} else {
+			throw new Error(`Failed to fetch jobs with status: ${response.status}`);
+		}
+	} catch (error: any) {
+		console.error("Error fetching jobs (sexy):", error);
+		throw new Error(error.response?.data?.message || error.message);
+	}
+}

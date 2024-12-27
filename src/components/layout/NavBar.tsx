@@ -16,7 +16,7 @@ const Navbar = () => {
     const { handleLogout } = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const navigate = useNavigate();
-    const location = useLocation();  // Use useLocation to track the current path
+    const location = useLocation(); 
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -33,7 +33,7 @@ const Navbar = () => {
     }, []);
 
     const handleMenuClick = (menu: string, path: string) => {
-        navigate(path); // Navigate to the new path
+        navigate(path); 
     };
 
     const toggleDropdown = () => {
@@ -45,7 +45,6 @@ const Navbar = () => {
         navigate('/dang-nhap');
     };
 
-    // Get the current path to highlight the active menu
     const getMenuColor = (menu: string) => {
         return location.pathname === menu ? 'green' : 'black';
     };
@@ -69,7 +68,7 @@ const Navbar = () => {
                         >
                             Việc làm
                         </li>
-                        <li
+                        {/* <li
                             onClick={() => handleMenuClick("/quan-ly-cv", "/quan-ly-cv")}
                             style={{
                                 color: getMenuColor("/quan-ly-cv"),
@@ -77,7 +76,7 @@ const Navbar = () => {
                             }}
                         >
                             Hồ sơ & CV
-                        </li>
+                        </li> */}
                         <li
                             onClick={() => handleMenuClick("/cong-ty", "/cong-ty")}
                             style={{
@@ -142,12 +141,6 @@ const Navbar = () => {
                                             <ul>
                                                 <li onClick={() => handleMenuClick("/cai-dat-thong-tin-ca-nhan", "/cai-dat-thong-tin-ca-nhan")}>Cài đặt thông tin cá nhân</li>
                                                 <li onClick={() => handleMenuClick("/cv-cua-toi", "/cv-cua-toi")}>Quản lí hồ sơ xin việc</li>
-                                                <li>Kích hoạt quà tặng</li>
-                                                <li>Nhà tuyển dụng xem hồ sơ</li>
-                                                <li>Cài đặt gợi ý việc làm</li>
-                                                <li>Cài đặt thông báo việc làm</li>
-                                                <li>Cài đặt nhận email</li>
-                                                <li>Cài đặt bảo mật</li>
                                                 <li>Đổi mật khẩu</li>
                                                 <li className="logout" onClick={handleLogoutClick}>Đăng xuất</li>
                                             </ul>

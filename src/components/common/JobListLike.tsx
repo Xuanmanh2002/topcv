@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
-import { getAllJob, getAllAddress } from '../utils/ApiFunctions';
+import { getAllJobsSexy, getAllAddress } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
 
 interface Address {
@@ -9,7 +9,7 @@ interface Address {
 }
 
 interface EmployerResponse {
-    id: string;
+    id: number;
     email: string;
     firstName: string;
     lastName: string;
@@ -18,11 +18,14 @@ interface EmployerResponse {
     telephone: string;
     addressId: string;
     companyName: string;
-    avatar: string | null;
-}
-
-interface Job {
-    id: string;
+    avatar: string;
+    rank: string;
+    scale: string;
+    fieldActivity: String;
+  }
+  
+  interface Job {
+    id: number;
     jobName: string;
     experience: string;
     applicationDeadline: Date;
@@ -33,7 +36,12 @@ interface Job {
     createAt: Date;
     employerEmail?: string;
     employerResponse: EmployerResponse;
-}
+    ranker: string;
+    quantity: number;
+    workingForm: string;
+    gender: string;
+  }
+  
 
 const JobListLike: React.FC = () => {
     const navigate = useNavigate();
@@ -48,7 +56,7 @@ const JobListLike: React.FC = () => {
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const jobData = await getAllJob();
+                const jobData = await getAllJobsSexy();
                 setJobs(jobData);
             } catch (error) {
                 console.error("Error fetching jobs:", error);

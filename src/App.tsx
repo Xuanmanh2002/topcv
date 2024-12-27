@@ -26,10 +26,11 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "r
 import MyCv from './components/application/MyCv';
 import Company from './components/employer/Company';
 import Profile from './components/profile/Profile';
-import JobSearch from './components/job/JobSearch';
+import JobNew from './components/job/JobNew';
 import JobCategory from './components/job/JobCategory';
 import JobLocation from './components/job/JobLocation';
 import JobLocationCategory from './components/job/JobLocationCategory';
+import JobSearch from './components/job/JobSearch';
 
 const AppContent = () => {
   const location = useLocation();
@@ -42,14 +43,15 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/dang-nhap" element={<Login />} />
         <Route path="/dang-ky" element={<Register />} />
-        <Route path="/viec-lam/:jobName" element={<ProfileJob />} />
+        <Route path="/viec-lam/:jobId" element={<ProfileJob />} />
         <Route path='/viec-lam' element={<Job/>} />
         <Route path='/quan-ly-cv' element={<CvManager/>} />
         <Route path='/cong-ty' element={<Employer />} />
         <Route path='/cv-cua-toi' element={<MyCv />} />
         <Route path='/cong-ty/:companyName' element={<Company />} />
         <Route path='/cai-dat-thong-tin-ca-nhan' element={<Profile />}/>
-        <Route path='/tim-viec-lam-moi-nhat' element={<JobSearch />}/>
+        <Route path='/tim-viec-lam-moi-nhat' element={<JobNew />}/>
+        <Route path='/tim-viec-lam-dua-vao/:keyword' element={<JobSearch />}/>
         <Route path='/tim-viec-lam/:categoryId' element={<JobCategory />}/>
         <Route path='/tim-viec-lam-tai/:addressId' element={<JobLocation />}/>
         <Route path='/tim-viec-lam/:categoryId-tai/:addressId' element={<JobLocationCategory/>}/>

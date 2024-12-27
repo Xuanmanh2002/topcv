@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAllCategory, getAllAddress } from '../utils/ApiFunctions';
 import { MenuUnfoldOutlined, EnvironmentOutlined, SearchOutlined, DownOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const SearchForm = () => {
     interface Category {
@@ -9,7 +10,7 @@ const SearchForm = () => {
     }
 
     interface Address {
-        id: number;
+        id: string;
         name: string;
     }
 
@@ -17,13 +18,53 @@ const SearchForm = () => {
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+    const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);  // Storing selected address ID
+    const [selectedAddressName, setSelectedAddressName] = useState<string | null>(null); // New state to store address name
 
+    const navigate = useNavigate();
+
+    // This function is used to handle the search action
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Search term:', searchTerm);
-        console.log('Selected category:', selectedCategory);
-        console.log('Selected address:', selectedAddress);
+
+        console.log('Search Term:', searchTerm);
+        console.log('Selected Category:', selectedCategory);
+        console.log('Selected Address:', selectedAddressName);  // Use the name here
+
+        if (selectedCategory && selectedAddressId) {
+            navigate(`/tim-viec-lam/${selectedCategory}-tai/${selectedAddressId}`);
+        } else if (selectedCategory) {
+            navigate(`/tim-viec-lam/${selectedCategory}`);
+        } else if (selectedAddressId) {
+            navigate(`/tim-viec-lam-tai/${selectedAddressId}`);
+        } else if (searchTerm) {
+            navigate(`/tim-viec-lam-dua-vao/${searchTerm}`);
+        } else {
+            navigate('/tim-viec-lam-moi-nhat');
+        }
+    };
+
+    useEffect(() => {
+        const storedCategoryId = localStorage.getItem('selectedCategoryId');
+        const storedAddressId = localStorage.getItem('selectedAddressId');
+
+        if (storedCategoryId) {
+            setSelectedCategory(storedCategoryId);
+        }
+
+        if (storedAddressId) {
+            setSelectedAddressId(storedAddressId);
+        }
+    }, []);
+
+    const handleAddressChange = (value: string) => {
+        setSelectedAddressId(value);
+        const address = addresses.find(address => address.id === value); // Find the address name
+        setSelectedAddressName(address ? address.name : null); // Set the name of the selected address
+    };
+
+    const handleCategoryChange = (value: string) => {
+        setSelectedCategory(value);
     };
 
     useEffect(() => {
@@ -70,7 +111,7 @@ const SearchForm = () => {
                                             <div
                                                 key={category.id}
                                                 className="custom-select-option-category"
-                                                onClick={() => setSelectedCategory(category.categoryName)}
+                                                onClick={() => handleCategoryChange(category.categoryName)}
                                             >
                                                 {category.categoryName}
                                             </div>
@@ -90,10 +131,10 @@ const SearchForm = () => {
                                 <div className="custom-select-location">
                                     <div
                                         className="custom-select-box-location"
-                                        onClick={() => setSelectedAddress(null)}
+                                        onClick={() => setSelectedAddressId(null)}
                                     >
                                         <EnvironmentOutlined style={{ marginRight: '8px' }} />
-                                        {selectedAddress || "Địa điểm"}
+                                        {selectedAddressName || "Địa điểm"}  {/* Show the name instead of ID */}
                                         <DownOutlined style={{ marginLeft: '70px', color: 'lightgray' }} />
                                     </div>
                                     <div className="custom-select-options-location">
@@ -101,7 +142,7 @@ const SearchForm = () => {
                                             <div
                                                 key={address.id}
                                                 className="custom-select-option-location"
-                                                onClick={() => setSelectedAddress(address.name)}
+                                                onClick={() => handleAddressChange(address.id)}
                                             >
                                                 {address.name}
                                             </div>

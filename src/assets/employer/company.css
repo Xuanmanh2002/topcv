@@ -21,6 +21,8 @@
 .company-link {
     padding-top: 24px;
     padding-bottom: 24px;
+    text-decoration: none;
+    color: #212F3F;
 }
 
 .company-page {
@@ -407,6 +409,7 @@ p {
 .box-search {
     display: flex;
     gap: 6px;
+    align-items: center;
 }
 
 .input-group-location {
@@ -481,7 +484,7 @@ select:focus {
 }
 
 @media screen and (min-width: 1200px) {
-    .job-listing .box-body .box-search .btn-search {
+    .btn-search {
         align-items: center;
         background: #00b14f;
         border-radius: 8px;
@@ -491,11 +494,10 @@ select:focus {
         font-weight: 400;
         gap: 11px;
         line-height: 24px;
-        padding: 11px 16px;
+        padding: 20px 15px;
         margin-left: 45px;
     }
 }
-
 
 .box-content {
     padding-top: 24px;
@@ -535,11 +537,13 @@ select:focus {
 
 .company-job-price {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between ;
     width: 100%;
+    gap: 300px;
 }
 
 .company-job-price h1 {
+    width: 200px;
     color: #212f3f;
     font-size: 16px;
     font-weight: 600;

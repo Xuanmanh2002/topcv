@@ -12,7 +12,8 @@ import { CiSearch, CiLocationOn } from 'react-icons/ci';
 import { HiSearch } from 'react-icons/hi';
 import { LiaMapSolid } from 'react-icons/lia';
 import { getEmployer, getAllAddress, getJobsByAdminAndStatusTrue, createApplication } from '../utils/ApiFunctions';
-
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 interface EmployerResponse {
     id: number;
     email: string;
@@ -66,6 +67,58 @@ const Company: React.FC = () => {
     const [cv, setCv] = useState<File | null>(null);
     const [applicationError, setApplicationError] = useState<string | null>(null);
     const [applicationSuccess, setApplicationSuccess] = useState<string | null>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [currentJobPage, setCurrentJobPage] = useState(1);
+    const [currentAddressPage, setCurrentAddressPage] = useState(1);
+    const jobsPerPage = 12;
+    const addressesPerPage = 5;
+    const [filteredJob, setFilteredJob] = useState<Job[]>([]);
+
+    const handleNextJobPage = () => {
+        if (currentJobPage < Math.ceil(jobs.length / jobsPerPage)) {
+            setCurrentJobPage(currentJobPage + 1);
+        }
+    };
+
+    const handlePrevJobPage = () => {
+        if (currentJobPage > 1) {
+            setCurrentJobPage(currentJobPage - 1);
+        }
+    };
+
+    const handleNextAddressPage = () => {
+        if (currentAddressPage < Math.ceil(addresses.length / addressesPerPage)) {
+            setCurrentAddressPage(currentAddressPage + 1);
+        }
+    };
+
+    const handlePrevAddressPage = () => {
+        if (currentAddressPage > 1) {
+            setCurrentAddressPage(currentAddressPage - 1);
+        }
+    };
+
+    const handleSearch = (value: string) => {
+        const filtered = jobs.filter((job) =>
+            job.jobName.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredJob(filtered);
+    };
+
+    const indexOfLastJob = currentJobPage * jobsPerPage;
+    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
+    const indexOfLastAddress = currentAddressPage * addressesPerPage;
+    const indexOfFirstAddress = indexOfLastAddress - addressesPerPage;
+    const currentAddresses = addresses.slice(indexOfFirstAddress, indexOfLastAddress);
+
+    const handleJobClick = (jobName: string, id: number) => {
+        localStorage.setItem('jobName', jobName);
+        localStorage.setItem('id', id.toString());
+        console.log(jobName, id);
+        navigate(`/viec-lam/${id}`);
+    };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -133,6 +186,7 @@ const Company: React.FC = () => {
 
                 const jobData = await getJobsByAdminAndStatusTrue(employerData.id);
                 setJobs(jobData);
+                setFilteredJob(jobData);
             } catch (err: any) {
                 console.error('Error fetching data:', err);
                 setError(err.message || 'Có lỗi xảy ra.');
@@ -159,7 +213,7 @@ const Company: React.FC = () => {
                         Tìm việc làm
                     </Link>
                     <FaChevronRight className="icon-divider" />
-                    <span>{employer?.companyName || 'Loading...'}</span>
+                    <span style={{ color: "#212F3F" }}>{employer?.companyName || 'Loading...'}</span>
                 </div>
 
                 <div className="company-page">
@@ -248,6 +302,7 @@ const Company: React.FC = () => {
                                                 className="form-control"
                                                 id="job-listing-name"
                                                 placeholder="Tên công việc, vị trí ứng tuyển..."
+                                                onChange={(e) => handleSearch(e.target.value)}
                                             />
                                         </div>
                                         <div className="input-group select-cities-container">
@@ -277,25 +332,25 @@ const Company: React.FC = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <a className='btn btn-search btn-search-job-company'>
-                                            <HiSearch className='fa-solid fa-magnifying-glass' />
+                                        <Button type="primary" className="btn btn-search btn-search-job-company">
+                                            <HiSearch className="fa-solid fa-magnifying-glass" />
                                             <span>Tìm kiếm</span>
-                                        </a>
+                                        </Button>
                                     </div>
                                     <div className='box-content' id='job-listing-content'>
-                                        {jobs.length > 0 ? (
-                                            jobs.map((job) => (
+                                        {filteredJob.length > 0 ? (
+                                            filteredJob.map((job) => (
                                                 <div className='job-list-defaul'>
                                                     <div className='job-item-default-detail'>
                                                         <div className='company-avatar'>
                                                             <img src={job.employerResponse.avatar ? `data:image/png;base64,${job.employerResponse.avatar}` : '/default-avatar.png'} className="img-responsive" />
                                                         </div>
                                                         <div>
-                                                            <div className='company-job-price'>
-                                                                <h1>
+                                                            <div className='company-job-price' >
+                                                                <h1 onClick={() => handleJobClick(job.jobName, job.id)}>
                                                                     {job?.jobName
-                                                                        ? job.jobName.length > 50
-                                                                            ? job.jobName.substring(0, 50) + "..."
+                                                                        ? job.jobName.length > 30
+                                                                            ? job.jobName.substring(0, 30) + "..."
                                                                             : job.jobName
                                                                         : "Loading..."}
                                                                 </h1>
@@ -369,9 +424,17 @@ const Company: React.FC = () => {
                                                 <span>Chưa có công việc tuyển dụng</span>
                                             </div>
                                         )}
+                                        <div className="main-pagination-container">
+                                            <div className="main-page-size">
+                                                <LeftOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handlePrevJobPage} />
+                                                <span className="main-page-infor">
+                                                    <span className="main-page-number">{currentJobPage}</span> / {Math.ceil(jobs.length / jobsPerPage)} trang
+                                                </span>
+                                                <RightOutlined className="main-form-job-header-item-page-size-see-more-icon-wrapper" onClick={handleNextJobPage} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div className='col-md-4'>

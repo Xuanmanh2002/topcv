@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { MdKeyboardArrowLeft, MdChevronRight } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 import SliderEmployer from '../employer/SliderEmployer';
-import { getActiveJobsByCategory, getAllCategory } from '../utils/ApiFunctions';
+import { getActiveJobsByCategory, getCategoriesWithJobs } from '../utils/ApiFunctions';
 
 interface Category {
     id: number;
     categoryName: string;
-    images: string;
+    description: string;
+    createAt: string;
+    images: string | null;
 }
 
 const ListCategory = () => {
@@ -14,29 +17,46 @@ const ListCategory = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const categoriesPerPage = 8;
     const [jobCounts, setJobCounts] = useState<{ [key: number]: number }>({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const navigate = useNavigate(); 
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchCategoriesAndJobs = async () => {
             try {
-                const fetchedCategories = await getAllCategory();
+                setLoading(true);
+                setError(null);
+
+                const fetchedCategories = await getCategoriesWithJobs();
                 setCategories(fetchedCategories);
-                const jobCountPromises = fetchedCategories.map(async (category) => {
-                    const count = await getActiveJobsByCategory(category.id);
-                    return { categoryId: category.id, count };
-                });
-                const jobCountsData = await Promise.all(jobCountPromises);
-                const jobCountsMap: { [key: number]: number } = {};
-                jobCountsData.forEach(({ categoryId, count }) => {
-                    jobCountsMap[categoryId] = count;
-                });
+
+                const jobCountsMap = await fetchJobCounts(fetchedCategories);
                 setJobCounts(jobCountsMap);
             } catch (error) {
                 console.error("Failed to fetch categories:", error);
+                setError("Không thể tải danh sách ngành nghề.");
+            } finally {
+                setLoading(false);
             }
         };
 
-        fetchCategories();
+        fetchCategoriesAndJobs();
     }, []);
+
+    const fetchJobCounts = async (categories: Category[]) => {
+        const jobCountPromises = categories.map(async (category) => {
+            try {
+                const count = await getActiveJobsByCategory(category.id);
+                return { [category.id]: count };
+            } catch {
+                return { [category.id]: 0 };
+            }
+        });
+
+        const jobCountsArray = await Promise.all(jobCountPromises);
+        return Object.assign({}, ...jobCountsArray);
+    };
 
     const indexOfLastCategory = currentPage * categoriesPerPage;
     const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
@@ -52,6 +72,10 @@ const ListCategory = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
+    };
+
+    const handleCategoryClick = (categoryId: number) => {
+        navigate(`/tim-viec-lam/${categoryId}`); // Redirect to the specific category's job page
     };
 
     return (
@@ -92,21 +116,34 @@ const ListCategory = () => {
                             <div className='owl-stage'>
                                 <div className='category-owl'>
                                     <div className='category-row-mx2'>
-                                        {currentCategories.length === 0 ? (
+                                        {loading ? (
                                             <p>Loading categories...</p>
+                                        ) : error ? (
+                                            <p>{error}</p>
+                                        ) : currentCategories.length === 0 ? (
+                                            <p>Không có ngành nghề nào.</p>
                                         ) : (
                                             currentCategories.map(category => (
                                                 <div className='category-col-md-3' key={category.id}>
-                                                    <div className='top-category-item'>
+                                                    <div
+                                                        className='top-category-item'
+                                                        onClick={() => handleCategoryClick(category.id)} // Add onClick handler
+                                                    >
                                                         <div className='top-category-image'>
-                                                            <a target='_blank'>
-                                                                <img src={category.images ? `data:image/png;base64,${category.images}` : '/default-avatar.png'} className='category-img-item' alt={category.categoryName} />
+                                                            <a>
+                                                                <img
+                                                                    src={category.images || '/default-avatar.png'}
+                                                                    className='category-img-item'
+                                                                    alt={category.categoryName}
+                                                                />
                                                             </a>
                                                         </div>
                                                         <h3 className='top-category-name'>
                                                             <a>{category.categoryName}</a>
                                                         </h3>
-                                                        <p className='top-category-caption'>{jobCounts[category.id] || 0} việc làm</p>
+                                                        <p className='top-category-caption'>
+                                                            {jobCounts[category.id] || 0} việc làm
+                                                        </p>
                                                     </div>
                                                 </div>
                                             ))
@@ -121,6 +158,6 @@ const ListCategory = () => {
             <SliderEmployer />
         </div>
     );
-}
+};
 
 export default ListCategory;

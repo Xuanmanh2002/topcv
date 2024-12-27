@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'antd';
 import { FaRegGem } from 'react-icons/fa';
-import { getEmployerByRank } from '../utils/ApiFunctions';
+import { getEmployersWithJobs } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 
@@ -30,7 +30,7 @@ const SliderEmployer = () => {
     useEffect(() => {
         const fetchEmployers = async () => {
             try {
-                const data = await getEmployerByRank();
+                const data = await getEmployersWithJobs();
                 setEmployers(data);
                 setFilteredEmployers(data);
             } catch (error: any) {

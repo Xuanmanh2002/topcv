@@ -49,16 +49,22 @@ const MainHome = () => {
     }, []);
 
     const handleSearch = () => {
+        console.log('Search Term:', searchTerm);
         console.log('Selected Category:', selectedCategory);
         console.log('Selected Address:', selectedAddressId);
-
         if (selectedCategory && selectedAddressId) {
             navigate(`/tim-viec-lam/${selectedCategory}-tai/${selectedAddressId}`);
-        } else if (selectedCategory) {
+        }
+        else if (selectedCategory) {
             navigate(`/tim-viec-lam/${selectedCategory}`);
-        } else if (selectedAddressId) {
+        }
+        else if (selectedAddressId) {
             navigate(`/tim-viec-lam-tai/${selectedAddressId}`);
-        } else {
+        }
+        else if (searchTerm) {
+            navigate(`/tim-viec-lam-dua-vao/${searchTerm}`);
+        }
+        else {
             navigate('/tim-viec-lam-moi-nhat');
         }
     };

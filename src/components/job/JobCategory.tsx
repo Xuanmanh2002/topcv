@@ -6,7 +6,7 @@ import { FaCheck, FaChevronDown } from "react-icons/fa6";
 import { IoMdCheckmark } from "react-icons/io";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { MdKeyboardArrowLeft, MdChevronRight } from "react-icons/md";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getAllJobsByCategory, getAllAddress, getAllCategory } from '../utils/ApiFunctions';
 
 interface Address {
@@ -53,17 +53,42 @@ interface Job {
 }
 
 const JobCategory = () => {
+  const navigate = useNavigate();
   const { categoryId } = useParams<{ categoryId: string }>();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  
+  const [currentJobPage, setCurrentJobPage] = useState(1);
+  const [currentAddressPage, setCurrentAddressPage] = useState(1);
+  const jobsPerPage = 12;
+  const addressesPerPage = 5;
+
   const getCategoryName = () => {
     const category = categories.find((cat) => cat.id === Number(categoryId));
     return category ? category.categoryName : "Danh mục không xác định";
   };
+
+  const handleNextJobPage = () => {
+    if (currentJobPage < Math.ceil(jobs.length / jobsPerPage)) {
+      setCurrentJobPage(currentJobPage + 1);
+    }
+  };
+
+  const handlePrevJobPage = () => {
+    if (currentJobPage > 1) {
+      setCurrentJobPage(currentJobPage - 1);
+    }
+  };
+
+  const indexOfLastJob = currentJobPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
+  const indexOfLastAddress = currentAddressPage * addressesPerPage;
+  const indexOfFirstAddress = indexOfLastAddress - addressesPerPage;
+  const currentAddresses = addresses.slice(indexOfFirstAddress, indexOfLastAddress);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -99,6 +124,14 @@ const JobCategory = () => {
     fetchAddresses();
   }, [categoryId]);
 
+  const handleJobClick = (jobName: string, id: number) => {
+    localStorage.setItem('jobName', jobName);
+    localStorage.setItem('id', id.toString());
+    console.log(jobName, id);
+    navigate(`/viec-lam/${id}`);
+  };
+
+
   return (
     <div className='container'>
       <div className="job-detail-layout">
@@ -106,7 +139,7 @@ const JobCategory = () => {
         <div className='job-search-container'>
           <div className='job-search-navbar'>
             <div className='job-search-navbar-title'>
-              <h1 className='job-search-navbar-heading'>Tuyển dụng 42.275 việc làm {getCategoryName()} [Update 11/12/2024]</h1>
+              <h1 className='job-search-navbar-heading'>Tuyển dụng việc làm {getCategoryName()} </h1>
               <div className='job-search-navbar-link'>
                 <ul className='job-search-navbar-item'>
                   <li className='job-search-navbar-item-custome'>
@@ -172,7 +205,7 @@ const JobCategory = () => {
             ) : error ? (
               <p style={{ color: 'red' }}>{error}</p>
             ) : jobs.length === 0 ? (
-              <p>No jobs found for this category.</p>
+              <p>Chưa có bài tuyển dụng</p>
             ) : (
               jobs.map((job) => (
                 <div className='job-search-item' key={job.id}>
@@ -188,7 +221,7 @@ const JobCategory = () => {
                           <div>
                             <h3 className='job-search-body-box-name'>
                               <a>
-                                <span style={{ paddingRight: "5px" }} >
+                                <span onClick={() => handleJobClick(job.jobName, job.id)} style={{ paddingRight: "5px" }} >
                                   {job.jobName}
                                 </span>
                                 <span className='icon-verified-employer-job' >
@@ -254,15 +287,15 @@ const JobCategory = () => {
             <div className='box-pagination'>
               <ul className='pagination'>
                 <li className='pagination-disabled' aria-disabled="true">
-                  <MdKeyboardArrowLeft aria-hidden="true" className='button-left-page' />
+                  <MdKeyboardArrowLeft aria-hidden="true" className='button-left-page' onClick={handlePrevJobPage} />
                 </li>
                 <li className='box-page-number'>
                   <span className='page-number'>
-                    <span className='page-number-high-light'>1 / </span> 200
+                    <span className='page-number-high-light'>{currentJobPage} / </span> {Math.ceil(jobs.length / jobsPerPage)} trang
                   </span>
                 </li>
                 <li>
-                  <MdChevronRight aria-hidden="true" className='button-right-page' />
+                  <MdChevronRight aria-hidden="true" className='button-right-page' onClick={handleNextJobPage} />
                 </li>
               </ul>
             </div>

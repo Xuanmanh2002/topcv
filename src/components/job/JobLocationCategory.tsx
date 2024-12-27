@@ -6,7 +6,7 @@ import { FaCheck, FaChevronDown } from "react-icons/fa6";
 import { IoMdCheckmark } from "react-icons/io";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { MdKeyboardArrowLeft, MdChevronRight } from "react-icons/md";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getAllJobsByLocationAndCategory, getAllAddress, getAllCategory } from '../utils/ApiFunctions';
 
 interface Address {
@@ -54,6 +54,7 @@ interface Job {
 
 
 const JobLocationCategory = () => {
+    const navigate = useNavigate();
     const categoryId = localStorage.getItem('categoryId');
     const addressId = localStorage.getItem('addressId');
     const [jobs, setJobs] = useState<Job[]>([]);
@@ -106,6 +107,12 @@ const JobLocationCategory = () => {
     const category = categories.find((cat) => cat.id.toString() === categoryId);
     const address = addresses.find((addr) => addr.id.toString() === addressId);
 
+    const handleJobClick = (jobName: string, id: number) => {
+        localStorage.setItem('jobName', jobName);
+        localStorage.setItem('id', id.toString());
+        console.log(jobName, id);
+        navigate(`/viec-lam/${jobName}`);
+    };
     return (
         <div className='container'>
             <div className="job-detail-layout">
@@ -198,7 +205,7 @@ const JobLocationCategory = () => {
                                                                 <span style={{ paddingRight: "5px" }} >
                                                                     {job.jobName}
                                                                 </span>
-                                                                <span className='icon-verified-employer-job' >
+                                                                <span onClick={() => handleJobClick(job.jobName, job.id)} className='icon-verified-employer-job' >
                                                                     <IoMdCheckmark className='icon-verified-employer-job-checked' />
                                                                 </span>
                                                             </a>

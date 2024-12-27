@@ -6,7 +6,7 @@ import { FaCheck, FaChevronDown } from "react-icons/fa6";
 import { IoMdCheckmark } from "react-icons/io";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { MdKeyboardArrowLeft, MdChevronRight } from "react-icons/md";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getAllJobsByAddress, getAllAddress, getAllCategory } from '../utils/ApiFunctions';
 
 
@@ -54,12 +54,38 @@ interface Job {
 }
 
 const JobLocation = () => {
+    const navigate = useNavigate();
     const { addressId } = useParams<{ addressId: string }>();
     const [jobs, setJobs] = useState<Job[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [currentJobPage, setCurrentJobPage] = useState(1);
+    const [currentAddressPage, setCurrentAddressPage] = useState(1);
+    const jobsPerPage = 12;
+    const addressesPerPage = 5;
+
+    const handleNextJobPage = () => {
+        if (currentJobPage < Math.ceil(jobs.length / jobsPerPage)) {
+            setCurrentJobPage(currentJobPage + 1);
+        }
+    };
+
+    const handlePrevJobPage = () => {
+        if (currentJobPage > 1) {
+            setCurrentJobPage(currentJobPage - 1);
+        }
+    };
+
+    const indexOfLastJob = currentJobPage * jobsPerPage;
+    const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+
+    const indexOfLastAddress = currentAddressPage * addressesPerPage;
+    const indexOfFirstAddress = indexOfLastAddress - addressesPerPage;
+    const currentAddresses = addresses.slice(indexOfFirstAddress, indexOfLastAddress);
 
     const getAddressName = () => {
         const numericAddressId = Number(addressId);
@@ -102,6 +128,13 @@ const JobLocation = () => {
         fetchJobs();
         fetchAddresses();
     }, [addressId]);
+
+    const handleJobClick = (jobName: string, id: number) => {
+        localStorage.setItem('jobName', jobName);
+        localStorage.setItem('id', id.toString());
+        console.log(jobName, id);
+        navigate(`/viec-lam/${id}`);
+    };
     return (
         <div className='container'>
             <div className="job-detail-layout">
@@ -109,7 +142,7 @@ const JobLocation = () => {
                 <div className='job-search-container'>
                     <div className='job-search-navbar'>
                         <div className='job-search-navbar-title'>
-                            <h1 className='job-search-navbar-heading'>Tuyển dụng 42.275 việc làm {getAddressName()} [Update 11/12/2024]</h1>
+                            <h1 className='job-search-navbar-heading'>Tuyển dụng việc làm {getAddressName()} </h1>
                             <div className='job-search-navbar-link'>
                                 <ul className='job-search-navbar-item'>
                                     <li className='job-search-navbar-item-custome'>
@@ -175,7 +208,7 @@ const JobLocation = () => {
                         ) : error ? (
                             <p style={{ color: 'red' }}>{error}</p>
                         ) : jobs.length === 0 ? (
-                            <p>No jobs found for this category.</p>
+                            <p>Không tìm thấy bài tuyển dụng nào</p>
                         ) : (
                             jobs.map((job) => (
                                 <div className='job-search-item' key={job.id}>
@@ -191,7 +224,7 @@ const JobLocation = () => {
                                                     <div>
                                                         <h3 className='job-search-body-box-name'>
                                                             <a>
-                                                                <span style={{ paddingRight: "5px" }} >
+                                                                <span onClick={() => handleJobClick(job.jobName, job.id)} style={{ paddingRight: "5px" }} >
                                                                     {job.jobName}
                                                                 </span>
                                                                 <span className='icon-verified-employer-job' >
@@ -223,7 +256,7 @@ const JobLocation = () => {
                                                     </label>
                                                     <label className='job-search-exp'>
                                                         <span>
-                                                            {job.experience} năm
+                                                            {job.experience}
                                                         </span>
                                                     </label>
                                                 </div>
@@ -257,15 +290,15 @@ const JobLocation = () => {
                         <div className='box-pagination'>
                             <ul className='pagination'>
                                 <li className='pagination-disabled' aria-disabled="true">
-                                    <MdKeyboardArrowLeft aria-hidden="true" className='button-left-page' />
+                                    <MdKeyboardArrowLeft aria-hidden="true" className='button-left-page' onClick={handlePrevJobPage} />
                                 </li>
                                 <li className='box-page-number'>
                                     <span className='page-number'>
-                                        <span className='page-number-high-light'>1 / </span> 200
+                                        <span className='page-number-high-light'>{currentJobPage} / </span> {Math.ceil(jobs.length / jobsPerPage)} trang
                                     </span>
                                 </li>
                                 <li>
-                                    <MdChevronRight aria-hidden="true" className='button-right-page' />
+                                    <MdChevronRight aria-hidden="true" className='button-right-page' onClick={handleNextJobPage} />
                                 </li>
                             </ul>
                         </div>

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined, FilterOutlined, HeartOutlined } from '@ant-design/icons';
-import { getAllJob, getAllAddress } from '../utils/ApiFunctions';
+import { getAllJobsGood, getAllAddress } from '../utils/ApiFunctions';
 import { useNavigate } from 'react-router-dom';
 import { FaChevronDown } from "react-icons/fa";
-import Slider from '../common/Slider'
 
 interface Address {
   id: string;
@@ -11,7 +10,7 @@ interface Address {
 }
 
 interface EmployerResponse {
-  id: string;
+  id: number;
   email: string;
   firstName: string;
   lastName: string;
@@ -20,8 +19,10 @@ interface EmployerResponse {
   telephone: string;
   addressId: string;
   companyName: string;
-  avatar: string | null;
+  avatar: string;
   rank: string;
+  scale: string;
+  fieldActivity: String;
 }
 
 interface Job {
@@ -55,7 +56,7 @@ const JobList: React.FC = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const jobData = await getAllJob();
+        const jobData = await getAllJobsGood();
         setJobs(jobData);
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -111,7 +112,7 @@ const JobList: React.FC = () => {
     localStorage.setItem('jobName', jobName);
     localStorage.setItem('id', id.toString());
     console.log(jobName, id);
-    navigate(`/viec-lam/${jobName}`);
+    navigate(`/viec-lam/${id}`);
   };
 
   return (

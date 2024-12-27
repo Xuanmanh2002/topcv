@@ -174,17 +174,30 @@
 .job-navbar {
     padding-bottom: 20px;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.job-link-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
 }
 
 .job-link {
     color: #3a9e39;
     text-decoration: none;
-    margin-right: 5px;
-    font-weight: bold;
 }
 
 .job-link-namejob {
-    padding-left: 5px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .icon-divider {
@@ -493,6 +506,7 @@
 .job-desctiption-report a span {
     color: #3a9e39;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .job-company {
@@ -554,7 +568,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.general-info{
+.general-info {
     font-size: 14px;
     width: 100%;
     max-width: 352px;
@@ -567,7 +581,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.general-info h4{
+.general-info h4 {
     font-size: 20px;
 }
 
@@ -654,7 +668,6 @@
     cursor: pointer;
 }
 
-
 .modal-job-location {
     color: #006400;
     font-size: 16px;
@@ -665,6 +678,7 @@
 .modal-job-apply-form .modal-job-form-section,
 .modal-job-apply-form .modal-job-form-group {
     margin-bottom: 15px;
+    margin-right: 70px;
 }
 
 .modal-job-upload-label {
@@ -758,4 +772,60 @@
     border-radius: 5px;
     font-weight: bold;
     margin-top: 10px;
+}
+
+.modal-report-name-button {
+    display: flex;
+    text-align: center;
+}
+
+.modal-report-name-button h2 {
+    font-weight: 700;
+    color: #00b14f;
+    text-align: center;
+    font-size: 24px;
+}
+
+.modal-report-describe {
+    margin: 0 0 10px;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+    text-align: center;
+}
+
+.modal-report-form-section {
+    padding-top: 7px;
+    margin-bottom: 15px;
+    display: flex;
+}
+
+.modal-report-label {
+    padding-right: 10px;
+    font-weight: 700;
+}
+
+.form-report-address {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-report-address:focus {
+    border-color: #32cd32;
+    box-shadow: 0 0 5px rgba(50, 205, 50, 0.5);
+    outline: none;
+}
+
+.form-report-address option {
+    font-size: 16px;
 }
